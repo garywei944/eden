@@ -1,8 +1,8 @@
-# evaon
+# Eden: Evangelion Development Environment Nexus
 
 Unix initialization solution that supports multiple OS
 
-## Why evaon?
+## Why Eden?
 
 The demand is straightforward:
 
@@ -31,6 +31,6 @@ I choose to use Python over bash for the following reasons:
 
 ## Predecessor
 
-[eva_init](https://github.com/garywei944/eva_init) is the predecessor of evaon.
+[eva_init](https://github.com/garywei944/eva_init) is the predecessor of Eden.
 It's a bash-based project that does the same thing, but it gets really messy and is hard
 to maintain and extent after a while.
