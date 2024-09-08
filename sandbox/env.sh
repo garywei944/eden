@@ -12,3 +12,4 @@ micromamba -y create -n eden -c conda-forge \
     attrs \
     absl-py
 micromamba activate eden
+pip install sh
