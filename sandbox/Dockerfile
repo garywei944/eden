@@ -3,7 +3,7 @@ FROM archlinux:latest
 
 # Update the system and install base-devel and git (required for AUR helpers)
 RUN pacman -Syu --noconfirm && \
-    pacman -S --needed --noconfirm base-devel git sudo
+    pacman -S --needed --noconfirm base-devel sudo vim git
 # pacman -S --needed --noconfirm base-devel git sudo openssl zlib xz libffi
 
 # Create a new user (e.g., 'auruser') and add to sudoers
@@ -13,6 +13,8 @@ RUN useradd -m auruser && \
 # Switch to the new user
 USER auruser
 WORKDIR /home/auruser
+
+ENV EDITOR=vim
 
 # Clone and build paru from AUR as non-root user
 RUN git clone https://aur.archlinux.org/paru-bin.git /tmp/paru-bin && \
