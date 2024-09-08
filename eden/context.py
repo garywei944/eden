@@ -64,6 +64,7 @@ class Context:
     os_type: OSType = get_os_type()
     os_version: str = platform.version()
     sudo: bool = check_sudo()
+    root_privileges: bool = os.geteuid() == 0
     arch: str = platform.architecture()[0]
 
     def __attrs_post_init__(self):
