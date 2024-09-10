@@ -83,3 +83,4 @@ class Context:
         logging.info(f"Root privileges: {self.root_privileges}")
         logging.info(f"Architecture: {self.arch}")
         logging.info(f"System: {system}")
+        print("-" * 80, file=sys.stderr)

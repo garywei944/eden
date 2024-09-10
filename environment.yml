@@ -7,7 +7,7 @@ name: eden
 channels:
   - conda-forge
 dependencies:
-  - python>=3.12
+  - python>=3.11
   - pip>=24.0
   - cython
 
@@ -15,6 +15,9 @@ dependencies:
   - absl-py
   - attrs
   - ruamel.yaml
+  - toml
+  - questionary
+  - requests
 
   # system utilities
   - distro

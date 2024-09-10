@@ -1,13 +1,21 @@
+import os
 from abc import ABC, abstractmethod
 from enum import Enum
+from typing import Self
 
 from absl import logging
 
-from ..context import Context
+from ..context import Context, OSType
+
+
+__all__ = ["PackageManager", "Distro"]
 
 
 class PackageManager(ABC):
     pkg_map: dict[str, str]
+
+    def __init__(self, ctx: Context):
+        self.ctx = ctx
 
     @abstractmethod
     def setup(self):
@@ -17,25 +25,37 @@ class PackageManager(ABC):
     def upgrade_system(self):
         pass
 
-    @abstractmethod
     def install_package(self, package: str | list[str]):
+        if isinstance(package, str):
+            package = [package]
+        self._install_package(package)
+
+    @abstractmethod
+    def _install_package(self, package: str):
         pass
 
 
-class Distro:
+class Distro(ABC):
     package_manager: PackageManager
+
+    def __new__(cls, ctx: Context) -> Self:
+        if cls is Distro:
+            match ctx.os_type:
+                case OSType.ARCH_LINUX:
+                    from .arch import ArchLinux
+
+                    return ArchLinux(ctx)
+                case _:
+                    raise NotImplementedError
+        return super().__new__(cls)
 
     def __init__(self, ctx: Context):
         self.ctx = ctx
-
-        # TODO: set up the package manager
 
     def setup(self):
         logging.info("Setting up the System")
 
         # set up sudo
-
-        # convert the following in python
         # echo "Defaults	editor=/usr/bin/vim
         # $USER	ALL=(ALL)	NOPASSWD: ALL" | sudo tee -a /etc/sudoers
         try:
@@ -48,6 +68,7 @@ class Distro:
         self.package_manager.setup()
 
     def upgrade_system(self):
+        logging.info("Upgrading the System")
         self.package_manager.upgrade_system()
 
     def evangelion_command_collection(self):

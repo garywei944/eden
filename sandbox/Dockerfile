@@ -14,6 +14,9 @@ RUN useradd -m auruser && \
 USER auruser
 WORKDIR /home/auruser
 
+# Copy all files from the parent directory into $HOME
+COPY . /home/auruser
+
 ENV EDITOR=vim
 
 # Clone and build paru from AUR as non-root user
