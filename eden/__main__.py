@@ -1,9 +1,10 @@
-import os
 import sys
 from absl import logging
+import questionary
 
 from .context import Context, OSType
 from .distros import Distro
+from .utils import restart_with_sudo
 
 logging.set_verbosity(logging.INFO)
 
@@ -14,35 +15,27 @@ if ctx.os_type != OSType.WINDOWS:
     import sh
 
 # if we don't have sudo permission, ask for it
-if ctx.sudo nad not ctx.root_privileges:
-    # TODO: We actually should ask the user if they want to run with sudo
+if ctx.sudo and not ctx.root_privileges:
 
-    logging.warning("Script requires root privileges. Restarting with sudo...")
-    # Detect if the script was run as a module with `python -m module`
-    if sys.argv[0].endswith("__main__.py"):
-        module_name = sys.modules["__main__"].__package__
-        if module_name:
-            command = [sys.executable, "-m", module_name] + sys.argv[1:]
+    if not questionary.confirm(
+        "Sudo privileges are available, but you are not using sudo. \
+Packages will be installed without sudo or the package manager. \
+Do you want to proceed?",
+        False,
+    ).ask():
+        if questionary.confirm("Do you want to restart with sudo?").ask():
+            restart_with_sudo()
         else:
-            raise Exception("Idk what happend here")
-    else:
-        command = [sys.executable] + sys.argv
+            logging.error("Exiting...")
+            sys.exit(1)
 
-    # Relaunch the script with sudo
-    try:
-        sh.sudo(command, _fg=True)
-    except sh.ErrorReturnCode as e:
-        logging.error(f"Failed to restart script with sudo: {e}")
-    finally:
-        sys.exit(1)
-
-assert (
-    not ctx.sudo or os.geteuid() == 0
-), "User has sudo permissions but is not running with sudo"
 
 distro = Distro(ctx)
 
 # Setup the system
 distro.setup()
+distro.config_keys()
 distro.upgrade_system()
 distro.evangelion_command_collection()
+distro.config_dotfiles()
+distro.config_terminal()

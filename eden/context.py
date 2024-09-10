@@ -4,19 +4,17 @@ import platform
 import distro
 
 from enum import Enum
-from attrs import define, field
+from attrs import define
 from absl import logging
 
 
 # only import sh if we are not on Windows
-if platform.system().lower() != "windows":
+system = platform.system().lower()
+if system != "windows":
     import sh
 
 
-system = platform.system().lower()
-
-
-__all__ = ["OSType", "Context"]
+__all__ = ["OSType", "Context", "system"]
 
 
 class OSType(Enum):
@@ -82,4 +80,6 @@ class Context:
         logging.info(f"OS Type: {self.os_type}")
         logging.info(f"OS Version: {self.os_version}")
         logging.info(f"Sudo: {self.sudo}")
+        logging.info(f"Root privileges: {self.root_privileges}")
         logging.info(f"Architecture: {self.arch}")
+        logging.info(f"System: {system}")
