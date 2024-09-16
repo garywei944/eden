@@ -13,11 +13,16 @@ dependencies:
 
   # essential functionality
   - absl-py
-  - attrs
-  - ruamel.yaml
-  - toml
   - questionary
   - requests
+
+  # OOP utilities
+  - attrs
+  - singleton-decorator
+
+  # meta data
+  - ruamel.yaml
+  - toml
 
   # system utilities
   - distro
