@@ -8,14 +8,15 @@ RUN pacman -Syu --noconfirm && \
 
 # Create a new user (e.g., 'auruser') and add to sudoers
 RUN useradd -m auruser && \
-    echo "auruser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    echo "auruser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo 'MAKEFLAGS="-j$(nproc)"' >> /etc/makepkg.conf
 
 # Switch to the new user
 USER auruser
 WORKDIR /home/auruser
 
 # Copy all files from the parent directory into $HOME
-COPY . /home/auruser
+COPY ./environment.yml /home/auruser
 
 ENV EDITOR=vim
 
@@ -26,6 +27,15 @@ RUN git clone https://aur.archlinux.org/paru-bin.git /tmp/paru-bin && \
     rm -rf /tmp/paru-bin
 
 RUN paru -S --noconfirm --needed micromamba-bin
+
+# Set up the environment
+ENV MAMBA_ROOT_PREFIX="/home/auruser/micromamba"
+RUN micromamba -y create -f environment.yml
+
+RUN echo "export MAMBA_ROOT_PREFIX=\"$HOME/micromamba\"" >> ~/.bashrc && \
+    echo "eval \"\$(micromamba shell hook --shell bash)\"" >> ~/.bashrc && \
+    echo "micromamba activate eden" >> ~/.bashrc
+
 
 # Set the default command
 CMD ["/bin/bash"]

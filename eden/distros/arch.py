@@ -11,6 +11,11 @@ from .distro import PackageManager, Distro
 class PACMAN(PackageManager):
     flags = ["--noconfirm", "--assume-installed"]
 
+    def __init__(self, ctx):
+        super().__init__(ctx)
+
+        assert ctx.sudo, "Arch Linux package manager requires sudo permissions"
+
     def setup(self, rank_mirrors: bool = True):
         logging.info("Setting up pacman")
         with sh.sudo(_with=True):
@@ -66,19 +71,21 @@ class PACMAN(PackageManager):
     def _install_package(self, package: str):
         sh.sudo.pacman("-S", *self.flags, *package, _fg=True)
 
+    def makepkg(self):
+        sh.makepkg("-si", "--needed", "--noconfirm", _fg=True)
+
 
 class PARU(PACMAN):
     def setup(self):
         super().setup()
 
-        # TODO: check if paru is already installed
-
-        # install paru
-        sh.git.clone("https://aur.archlinux.org/paru.git", "--depth=1", _fg=True)
-        os.chdir("paru")
-        sh.makepkg("-si", "--needed", "--noconfirm", _fg=True)
-        os.chdir("..")
-        shutil.rmtree("paru")
+        if not shutil.which("paru"):
+            # install paru
+            sh.git.clone("https://aur.archlinux.org/paru.git", "--depth=1", _fg=True)
+            os.chdir("paru")
+            self.makepkg()
+            os.chdir("..")
+            shutil.rmtree("paru")
 
     def _install_package(self, package: str):
         sh.paru("-S", *self.flags, *package, _fg=True)
@@ -88,14 +95,13 @@ class YAY(PACMAN):
     def setup(self):
         super().setup()
 
-        # TODO: check if yay is already installed
-
-        # install yay
-        sh.git.clone("https://aur.archlinux.org/yay.git", "--depth=1", _fg=True)
-        os.chdir("yay")
-        sh.makepkg("-si", "--needed", "--noconfirm", _fg=True)
-        os.chdir("..")
-        shutil.rmtree("yay")
+        if not shutil.which("yay"):
+            # install yay
+            sh.git.clone("https://aur.archlinux.org/yay.git", "--depth=1", _fg=True)
+            os.chdir("yay")
+            self.makepkg()
+            os.chdir("..")
+            shutil.rmtree("yay")
 
     def _install_package(self, package: str):
         sh.yay("-S", *self.flags, *package, _fg=True)

@@ -28,7 +28,7 @@ class PackageManager(ABC):
     def install_package(self, package: str | list[str]):
         if isinstance(package, str):
             package = [package]
-        self._install_package(package)
+        self._install_package(" ".join(package))
 
     @abstractmethod
     def _install_package(self, package: str):
