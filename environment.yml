@@ -13,6 +13,7 @@ dependencies:
 
   # essential functionality
   - absl-py
+  - overrides
   - questionary
   - requests
 
@@ -32,3 +33,4 @@ dependencies:
   # for dependency completeness.
   - pip:
       - sh
+      - morecontext

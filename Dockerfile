@@ -14,12 +14,12 @@ WORKDIR /home/eva
 ENV EDITOR=vim
 
 # Clone and build paru from AUR as non-root user
-RUN git clone https://aur.archlinux.org/paru-bin.git /tmp/paru-bin && \
+RUN git clone --depth 1 https://aur.archlinux.org/paru-bin.git /tmp/paru-bin && \
     cd /tmp/paru-bin && \
     makepkg -si --noconfirm && \
     rm -rf /tmp/paru-bin
 # build yay
-RUN git clone https://aur.archlinux.org/yay.git /tmp/yay && \
+RUN git clone --depth 1 https://aur.archlinux.org/yay.git /tmp/yay && \
     cd /tmp/yay && \
     makepkg -si --noconfirm && \
     rm -rf /tmp/yay
