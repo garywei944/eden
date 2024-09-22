@@ -3,7 +3,10 @@
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 cd "$DIR" || exit
 
-unzip keys.zip
+if ! unzip keys.zip; then
+    echo "Error: Failed to unzip keys.zip"
+    exit 1
+fi
 chmod +x config_keys.sh
 ./config_keys.sh
 

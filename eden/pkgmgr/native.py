@@ -14,4 +14,13 @@ __all__ = ["NativePM"]
 
 
 @define
-class NativePM(PackageManager): ...
+class NativePM(PackageManager):
+
+    @overrides
+    def setup_pkgmgr(self): ...
+
+    @overrides
+    def upgrade_system(self): ...
+
+    @overrides
+    def _install_package(self, package: list[str]): ...

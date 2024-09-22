@@ -4,8 +4,10 @@ RUN useradd -m eva && \
     echo "eva ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo 'MAKEFLAGS="-j$(nproc)"' >> /etc/makepkg.conf
 
+RUN echo "eva:jk" | chpasswd
+
 RUN pacman -Syu --noconfirm && \
-    pacman -S --needed --noconfirm base-devel sudo vim git
+    pacman -S --needed --noconfirm base-devel sudo vim git unzip openssh
 
 # Switch to the new user
 USER eva
@@ -36,8 +38,10 @@ RUN echo "export MAMBA_ROOT_PREFIX=\"$HOME/micromamba\"" >> ~/.bashrc && \
     echo "micromamba activate eden" >> ~/.bashrc
 
 # Set the default command
+WORKDIR /home/eva/eden
 CMD ["/bin/bash"]
 
 
 # Copy all files from the parent directory into $HOME
-COPY ./eden /home/eva/eden
+# COPY ./eden /home/eva/eden
+# COPY ./keys /home/eva/keys

@@ -9,15 +9,23 @@ from overrides import overrides
 from morecontext import dirchanged
 
 from .pkgmgr import PackageManager
+from ..utils import sh_, sh_contrib_
 
 __all__ = ["Pacman", "Yay", "Paru", "makepkg"]
 
 FLAGS = flags.FLAGS
 flags.DEFINE_bool("rank_mirrors", False, "Rank mirrors for Arch Linux")
 
+BASE_PKGS = ["base-devel", "git", "pacman-contrib", "sudo", "vim", "unzip", "openssh"]
 
-def makepkg():
-    sh.makepkg("-si", "--needed", "--noconfirm", _fg=True)
+
+def makepkg(git_url: str):
+    package = git_url.split("/")[-1].replace(".git", "")
+    with dirchanged("/tmp"):
+        sh_contrib_("git", "clone", git_url, "--depth=1", package)
+        with dirchanged(package):
+            sh_("makepkg", "-si", "--needed", "--noconfirm")
+        shutil.rmtree(package)
 
 
 @define
@@ -39,18 +47,11 @@ class Pacman(PackageManager):
             ):
                 logging.info("Setting MAKEFLAGS in makepkg.conf")
                 # echo 'MAKEFLAGS="-j$(nproc)"' | sudo tee -a /etc/makepkg.conf
-                sh.tee("-a", "/etc/makepkg.conf", _in=sh.echo('MAKEFLAGS="-j$(nproc)"'))
+                sh.tee("-a", "/etc/makepkg.conf", _in='MAKEFLAGS="-j$(nproc)"')
 
             # sudo pacman -Syu --noconfirm
-            sh.pacman("-Sy", _fg=True)
-            sh.pacman(
-                "-S",
-                *self.flags,
-                "base-devel",
-                "git",
-                "pacman-contrib",
-                _fg=True,
-            )
+            sh_("pacman", "-Sy")
+            sh_("pacman", "-S", *self.flags, *BASE_PKGS)
 
             # rank mirrors
             # sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
@@ -61,7 +62,7 @@ class Pacman(PackageManager):
             #   sudo tee /etc/pacman.d/mirrorlist
             if FLAGS.rank_mirrors:
                 logging.info("Ranking mirrors")
-                sh.cp("/etc/pacman.d/mirrorlist", "/etc/pacman.d/mirrorlist.bak")
+                sh_("cp", "/etc/pacman.d/mirrorlist", "/etc/pacman.d/mirrorlist.bak")
                 # read COUNTRY from the environment
                 country = os.getenv("COUNTRY", "US")
                 url = f"https://archlinux.org/mirrorlist/?country={country}&protocol=http&protocol=https&ip_version=4&ip_version=6&use_mirror_status=on"
@@ -99,17 +100,12 @@ class Yay(Pacman):
         super().setup_pkgmgr()
 
         if not shutil.which("yay"):
-            # install yay
-            with dirchanged("/tmp"):
-                sh.git.clone("https://aur.archlinux.org/yay.git", "--depth=1", _fg=True)
-                os.chdir("yay")
-                makepkg()
-                os.chdir("..")
-                shutil.rmtree("yay")
+            makepkg("https://aur.archlinux.org/yay.git")
 
     @overrides
     def _install_package(self, package: list[str]):
-        sh.yay("-S", *self.flags, *package, _fg=True)
+        # sh.yay("-S", *self.flags, *package, _fg=True)
+        sh_("yay", "-S", *self.flags, *package)
 
 
 class Paru(Pacman):
@@ -118,16 +114,9 @@ class Paru(Pacman):
         super().setup_pkgmgr()
 
         if not shutil.which("paru"):
-            # install paru
-            with dirchanged("/tmp"):
-                sh.git.clone(
-                    "https://aur.archlinux.org/paru.git", "--depth=1", _fg=True
-                )
-                os.chdir("paru")
-                makepkg()
-                os.chdir("..")
-                shutil.rmtree("paru")
+            makepkg("https://aur.archlinux.org/paru.git")
 
     @overrides
     def _install_package(self, package: list[str]):
-        sh.paru("-S", *self.flags, *package, _fg=True)
+        # sh.paru("-S", *self.flags, *package, _fg=True)
+        sh_("paru", "-S", *self.flags, *package)

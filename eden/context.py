@@ -3,6 +3,7 @@ import sys
 import platform
 import distro
 import sh
+from tabulate import tabulate
 
 from enum import Enum
 from attrs import define
@@ -59,10 +60,18 @@ class Context:
     arch: str = platform.architecture()[0]
 
     def __attrs_post_init__(self):
-        logging.info(f"OS Type: {self.os_type}")
-        logging.info(f"OS Version: {self.os_version}")
-        logging.info(f"Sudo: {self.sudo}")
-        logging.info(f"Root privileges: {self.root_privileges}")
-        logging.info(f"Architecture: {self.arch}")
-        logging.info(f"System: {system}")
+        logging.info(
+            "\n"
+            + tabulate(
+                [
+                    ["OS Type", self.os_type],
+                    ["OS Version", self.os_version],
+                    ["Sudo", self.sudo],
+                    ["Root privileges", self.root_privileges],
+                    ["Architecture", self.arch],
+                    ["System", system],
+                ],
+                headers=["Key", "Value"],
+            )
+        )
         print("-" * 80, file=sys.stderr)

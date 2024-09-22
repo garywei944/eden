@@ -16,6 +16,7 @@ dependencies:
   - overrides
   - questionary
   - requests
+  - tabulate
 
   # OOP utilities
   - attrs
