@@ -104,25 +104,14 @@ class Eden:
                 logging.error(e)
                 return
 
-        # config git ssh
-        # mkdir -p ~/.ssh
-        # ssh-keygen -R github.com
-        # #  ssh-keyscan github.com >> ~/.ssh/known_hosts
-        # curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >>~/.ssh/known_hosts
-        # chmod 700 ~/.ssh
-        # chmod 644 ~/.ssh/known_hosts
+        # Create .ssh directory if not exists
         ssh_path = Path.home() / ".ssh"
         ssh_path.mkdir(exist_ok=True)
         os.chmod(ssh_path, 0o700)
 
-        known_hosts = ssh_path / "known_hosts"
-        known_hosts.touch(exist_ok=True)
-
-        response = requests.get("https://api.github.com/meta")
-        sh.ssh_keygen("-R", "github.com", _in="yes\n")
-        with open(known_hosts, "a") as f:
-            for key in response.json().get("ssh_keys", []):
-                f.write(f"github.com {key}\n")
+        # config git ssh
+        with open(ssh_path / "known_hosts", "a") as f:
+            sh.ssh_keyscan("-H", "github.com", _out=f)
         os.chmod(ssh_path / "known_hosts", 0o644)
 
     def install_ecc(self): ...
@@ -132,13 +121,6 @@ class Eden:
 
         with dirchanged(Path.home()):
             shutil.rmtree(".git", ignore_errors=True)
-            # sh.contrib.git("init")
-            # sh.contrib.git("remote", "add", "origin", DOTFILES_REPO)
-            # sh.contrib.git("config", "core.excludesFile", ".eva.gitignore")
-            # sh.contrib.git("fetch", "--depth=1")
-            # sh.contrib.git("reset", "--hard", "origin/main")
-            # sh.contrib.git("branch", "-m", "master", "main")
-            # sh.contrib.git("branch", "--set-upstream-to=origin/main", "main")
             sh_contrib_("git", "init")
             sh_contrib_("git", "remote", "add", "origin", DOTFILES_REPO)
             sh_contrib_("git", "config", "core.excludesFile", ".eva.gitignore")
@@ -150,7 +132,6 @@ class Eden:
     def config_shell(self):
         logging.info("Configuring shell")
 
-        # sh.chsh("-s", "/usr/bin/zsh")
         if os.environ.get("SHELL") != "/usr/bin/zsh":
             sh_("chsh", "-s", "/usr/bin/zsh")
 
