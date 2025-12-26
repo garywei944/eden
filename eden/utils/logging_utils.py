@@ -6,7 +6,9 @@ __all__ = ["setup_root_logger", "log_header"]
 logger = logging.getLogger(__name__)
 
 
-def setup_root_logger(process_info: bool = False, full_path: bool = False):
+def setup_root_logger(
+    thread_info: bool = False, process_info: bool = False, full_path: bool = False
+):
     old_factory = logging.getLogRecordFactory()
 
     def hex_tid_factory(*args, **kwargs):
@@ -18,14 +20,16 @@ def setup_root_logger(process_info: bool = False, full_path: bool = False):
 
         return record
 
-    logging.setLogRecordFactory(hex_tid_factory)
+    if thread_info:
+        logging.setLogRecordFactory(hex_tid_factory)
 
     log_format_segs = ["%(levelname).1s%(asctime)s.%(msecs)03d"]
 
     if process_info:
         log_format_segs.append("[%(process)d:%(processName)s]")
+    if thread_info:
+        log_format_segs.append("[%(thread_hex)s:%(threadName)s]")
 
-    log_format_segs.append("[%(thread_hex)s:%(threadName)s]")
     log_format_segs.append("%(name)s")
     log_format_segs.append("|")
 
