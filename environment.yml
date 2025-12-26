@@ -27,6 +27,15 @@ dependencies:
   # system utilities
   - distro
 
+  # tests
+  - pytest
+  - pytest-asyncio
+  - pytest-cov
+  - pytest-forked
+  - pytest-mock
+  - pytest-subtests
+  - pytest-xdist
+
   # If you need to install pip packages, don't do `pip install xxx`
   # Add the package here and run `mamba env update -f environment.yml --prune`
   # for dependency completeness.
