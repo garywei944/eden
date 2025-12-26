@@ -20,7 +20,7 @@ ignore = []
 [tool.ruff.lint.isort]
 known-first-party = ["eden"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "eden/__main__.py" = ["E402"]
 
 # ---------------- mypy ----------------

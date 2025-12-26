@@ -5,12 +5,16 @@ setup_root_logger()
 import logging
 from pathlib import Path
 
+from eden.context import RuntimeContext
+
 logger = logging.getLogger(__name__)
 
 
 def main():
     logger.info("Eden main module executed")
-    logger.info(f"Eden project root: {Path(__file__).parent.resolve()}")
+
+    project_root = Path(__file__).parent.parent.resolve()
+    RuntimeContext.build(project_root=project_root)
 
 
 main()
