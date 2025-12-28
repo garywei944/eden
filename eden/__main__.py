@@ -5,7 +5,7 @@ setup_root_logger()
 import logging
 from pathlib import Path
 
-from eden.context import RuntimeContext
+from sandbox.context import RuntimeContext
 
 logger = logging.getLogger(__name__)
 
