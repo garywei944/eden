@@ -3,7 +3,7 @@
 # or `conda env create -f environment.yml` to install the environment
 # Created and maintained by garywei944(garywei944@gmail.com)
 
-name: eden
+name: eden_dev
 channels:
   - conda-forge
 dependencies:
@@ -26,6 +26,20 @@ dependencies:
 
   # system utilities
   - distro
+
+  # tests
+  - pytest
+  - pytest-asyncio
+  - pytest-cov
+  - pytest-forked
+  - pytest-mock
+  - pytest-subtests
+  - pytest-xdist
+
+  # development
+  - pre-commit
+  - black
+  - ruff
 
   # If you need to install pip packages, don't do `pip install xxx`
   # Add the package here and run `mamba env update -f environment.yml --prune`

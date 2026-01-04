@@ -43,10 +43,3 @@ show_error_codes = true
 
 # Allow gradual typing (important for personal projects)
 ignore_missing_imports = true
-
-# ---------------- Commitizen ----------------
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.1.0"
-tag_format = "v$version"
-update_changelog_on_bump = false
