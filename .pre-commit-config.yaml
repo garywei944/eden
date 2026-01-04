@@ -10,12 +10,12 @@ repos:
       - id: check-symlinks
       - id: destroyed-symlinks
       - id: trailing-whitespace
-        exclude: '.*\.spec'
+        exclude: .*\.spec
       - id: end-of-file-fixer
-        exclude: '.*\.spec'
+        exclude: .*\.spec
       - id: check-yaml
         args: [--allow-multiple-documents]
-        exclude: "^(.*template.*|.*templates.*)$"
+        exclude: ^(.*template.*|.*templates.*)$
       - id: check-toml
       - id: check-ast
       - id: check-added-large-files
@@ -27,7 +27,7 @@ repos:
       - id: check-case-conflict
       - id: check-json
       - id: mixed-line-ending
-        args: ["--fix=lf"]
+        args: [--fix=lf]
   - repo: https://github.com/psf/black
     rev: 25.12.0
     hooks:
