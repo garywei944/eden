@@ -1,0 +1,39 @@
+services:
+  eden:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # ! All arguments should be passed in by
+      # ! "docker compose build --build-arg ***"
+      # The defualt values are set within the Dockerfile
+    image: ${IMAGE_NAME:-eden-dev:latest}
+    container_name: ${CONTAINER_NAME:-eden-dev}
+    runtime: nvidia
+    shm_size: 100g
+    cap_add:
+      - IPC_LOCK
+      # - SYS_ADMIN
+      # - NET_ADMIN
+      # - SYS_PTRACE
+    privileged: false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    security_opt:
+      # - seccomp=unconfined
+      - seccomp=default
+    deploy:
+      resources:
+        limits:
+          cpus: ${CPUS:-16.0}
+        # reservations:
+        #   devices:
+        #     - driver: nvidia
+        #       count: all # alternatively, use `count: all` for all GPUs
+        #       capabilities: [gpu]
+    volumes:
+      - ${PROJECT_ROOT:-..}:/eden
+    working_dir: /eden
+    stdin_open: true
+    tty: true

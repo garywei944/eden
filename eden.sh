@@ -19,7 +19,7 @@ EDEN_HOME="${PROJECT_ROOT}/.eden"
 ENV_NAME="eden"
 
 # mamba env
-export MAMBA_ROOT_PREFIX="${EDEN_HOME}/.conda"
+export MAMBA_ROOT_PREFIX="${EDEN_HOME}/micromamba"
 export PATH="${MAMBA_ROOT_PREFIX}/bin:${PATH}"
 
 log "MAMBA_ROOT_PREFIX: ${MAMBA_ROOT_PREFIX}"

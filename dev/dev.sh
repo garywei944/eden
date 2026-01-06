@@ -3,14 +3,14 @@
 set -euxo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-PROJECT_ROOT="$(realpath "${SCRIPT_DIR}")"
+PROJECT_ROOT="$(realpath "${SCRIPT_DIR}"/..)"
+export PROJECT_ROOT
 
-SHELL="${SHELL:-/bin/bash}"
-IMAGE="${IMAGE:-archlinux:latest}"
+cd ${PROJECT_ROOT}
 
-docker run --rm -it \
-  --name eden-dev \
-  -v "${PROJECT_ROOT}:/eden" \
-  -w /eden \
-  "${IMAGE}" \
-  "${SHELL}"
+BASE_IMAGE=${BASE_IMAGE:-debian:12}
+export BASE_IMAGE
+
+# Build and start (first time or after environment.yml changes)
+docker compose -f "${PROJECT_ROOT}/dev/docker-compose.yml" build
+docker compose -f "${PROJECT_ROOT}/dev/docker-compose.yml" run --rm eden
