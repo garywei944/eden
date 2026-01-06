@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 PROJECT_ROOT="$(realpath "${SCRIPT_DIR}"/..)"
 export PROJECT_ROOT
 
-cd ${PROJECT_ROOT}
+cd "${PROJECT_ROOT}"
 
 BASE_IMAGE=${BASE_IMAGE:-debian:12}
 export BASE_IMAGE

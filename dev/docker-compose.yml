@@ -1,8 +1,8 @@
 services:
   eden:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: dev/Dockerfile
       # ! All arguments should be passed in by
       # ! "docker compose build --build-arg ***"
       # The defualt values are set within the Dockerfile
@@ -20,9 +20,9 @@ services:
       memlock:
         soft: -1
         hard: -1
-    security_opt:
-      # - seccomp=unconfined
-      - seccomp=default
+    # security_opt:
+    #   - seccomp=unconfined
+    #   # - seccomp=default
     deploy:
       resources:
         limits:

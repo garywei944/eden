@@ -32,7 +32,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     fi
 
 # Set up micromamba
-ENV MAMBA_ROOT_PREFIX=/eden/micromamba
+ENV MAMBA_ROOT_PREFIX=/eden/.eden/micromamba
 ENV PATH="${MAMBA_ROOT_PREFIX}/bin:${PATH}"
 
 # Install micromamba
@@ -49,9 +49,9 @@ COPY environment.yml .
 RUN micromamba create -y -f environment.yml && \
     micromamba clean --all --yes
 
-# Set up shell initialization for interactive use
-RUN micromamba shell init -s bash -p "${MAMBA_ROOT_PREFIX}" && \
-    echo "micromamba activate eden" >> /root/.bashrc
+# # Set up shell initialization for interactive use
+# RUN micromamba shell init -s bash -p "${MAMBA_ROOT_PREFIX}" && \
+#     echo "micromamba activate eden" >> /root/.bashrc
 
 ENV ENV_NAME=eden
 
