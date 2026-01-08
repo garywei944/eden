@@ -2,10 +2,12 @@ import logging
 import os
 from pathlib import Path
 
+import attrs
 import sh
-from attrs import define, field
 
 from eden.utils.singleton import Singleton
+
+__all__ = ["Context", "has_sudo"]
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +26,10 @@ def has_sudo() -> bool:
         return False
 
 
-@define(frozen=True)
+@attrs.define(frozen=True)
 class Context(Singleton):
-    project_root: Path = field(default=PROJECT_ROOT)
-    has_sudo: bool = field(factory=has_sudo)
+    project_root: Path = attrs.field(default=PROJECT_ROOT)
+    has_sudo: bool = attrs.field(factory=has_sudo)
+
+    # check if it's a byted devbox
+    byted: bool = False

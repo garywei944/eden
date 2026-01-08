@@ -3,7 +3,7 @@ import os
 from abc import ABC
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from functools import partial
-from typing import Self, final, get_args, get_origin, override
+from typing import final, get_args, get_origin, override
 
 from tap import Tap
 
@@ -33,14 +33,9 @@ class ArgsBase(Tap, Singleton, ABC):
 
     @final
     def __init__(self, args: list[str] | None = None, *, frozen: bool = True) -> None:
-        self.parser: Self = self
-        self.args: Self = self
         super().__init__(explicit_bool=True, allow_abbrev=False)
 
         self.parse_args(args=args, known_only=True)
-
-        # only for backward compatibility
-        self.unknown_args = self.extra_args
 
         if frozen:
             freeze_dataclass(self.__class__)
