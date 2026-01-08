@@ -38,6 +38,7 @@ dependencies:
 
   # development
   - pre-commit
+  - identify>=2.6.15
   - black
   - ruff
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -euxo pipefail
 
 # This script is POSIX-compliant
 
@@ -22,11 +22,13 @@ ENV_NAME="eden"
 export MAMBA_ROOT_PREFIX="${EDEN_HOME}/micromamba"
 export PATH="${MAMBA_ROOT_PREFIX}/bin:${PATH}"
 
+mkdir -p "${MAMBA_ROOT_PREFIX}"
+
 log "MAMBA_ROOT_PREFIX: ${MAMBA_ROOT_PREFIX}"
 log "PATH: ${PATH}"
 
 install_micromamba() {
-  if command_exists micromamba; then
+  if [[ -x "${MAMBA_ROOT_PREFIX}/bin/micromamba" ]]; then
     return
   fi
 

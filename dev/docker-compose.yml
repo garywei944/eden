@@ -9,7 +9,8 @@ services:
     image: ${IMAGE_NAME:-eden-dev:latest}
     container_name: ${CONTAINER_NAME:-eden-dev}
     runtime: nvidia
-    shm_size: 100g
+    network_mode: host
+    shm_size: 16g
     cap_add:
       - IPC_LOCK
       # - SYS_ADMIN
