@@ -3,16 +3,23 @@ from eden.utils.logging_utils import setup_root_logger
 setup_root_logger()
 
 import logging
-from pathlib import Path
+
+from eden.context import Context
 
 logger = logging.getLogger(__name__)
 
 
 def main():
+    setup_logging()
+
     logger.info("Eden main module executed")
 
-    project_root = Path(__file__).parent.parent.resolve()
-    logger.info("Project root: %s", project_root)
+    ctx = Context()
+    logger.info("context: %s", ctx)
+
+
+def setup_logging():
+    logging.getLogger("sh").setLevel(logging.INFO)
 
 
 main()

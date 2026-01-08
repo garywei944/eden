@@ -8,6 +8,8 @@ export PROJECT_ROOT
 
 cd "${PROJECT_ROOT}"
 
+COMPOSE_FILE="${PROJECT_ROOT}/dev/docker-compose.yml"
+
 BASE_IMAGE=${BASE_IMAGE:-debian:12}
 export BASE_IMAGE
 
@@ -15,5 +17,5 @@ CPUS="$(nproc).0"
 export CPUS
 
 # Build and start (first time or after environment.yml changes)
-docker compose -f "${PROJECT_ROOT}/dev/docker-compose.yml" build
-docker compose -f "${PROJECT_ROOT}/dev/docker-compose.yml" run --rm eden
+docker compose -f "${COMPOSE_FILE}" build
+docker compose -f "${COMPOSE_FILE}" run --rm eden

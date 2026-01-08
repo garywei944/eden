@@ -6,10 +6,17 @@ services:
       # ! All arguments should be passed in by
       # ! "docker compose build --build-arg ***"
       # The defualt values are set within the Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-debian:12}
+        CPUS: ${CPUS:-16.0}
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
     image: ${IMAGE_NAME:-eden-dev:latest}
     container_name: ${CONTAINER_NAME:-eden-dev}
-    runtime: nvidia
-    network_mode: host
+    cpus: ${CPUS:-16.0}
+    gpus: all
+    # runtime: nvidia
+    # network_mode: host
     shm_size: 16g
     cap_add:
       - IPC_LOCK
@@ -24,15 +31,13 @@ services:
     # security_opt:
     #   - seccomp=unconfined
     #   # - seccomp=default
-    deploy:
-      resources:
-        limits:
-          cpus: ${CPUS:-16.0}
-        # reservations:
-        #   devices:
-        #     - driver: nvidia
-        #       count: all # alternatively, use `count: all` for all GPUs
-        #       capabilities: [gpu]
+    # deploy:
+    #   resources:
+    # reservations:
+    #   devices:
+    #     - driver: nvidia
+    #       count: all # alternatively, use `count: all` for all GPUs
+    #       capabilities: [gpu]
     volumes:
       - ${PROJECT_ROOT:-..}:/eden
     working_dir: /eden
