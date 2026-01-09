@@ -18,6 +18,9 @@ dependencies:
   - typer
   - typed-argument-parser
 
+  # algorithms
+  - networkx
+
   # OOP utilities
   - attrs
 
@@ -33,3 +36,4 @@ dependencies:
   - pip:
       - sh
       - morecontext
+      - py-dagviz

@@ -6,7 +6,7 @@ requires-python = ">=3.14"
 # ---------------- Black ----------------
 [tool.black]
 line-length = 100
-target-version = ["py314"]
+target-version = ["py313"]
 
 # ---------------- Ruff ----------------
 [tool.ruff]
