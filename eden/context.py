@@ -1,10 +1,13 @@
 import logging
 import os
+from dataclasses import dataclass, field
 from pathlib import Path
 
-import attrs
+import distro
 import sh
+from packaging import version as pv
 
+from eden.args import Args
 from eden.utils.singleton import Singleton
 
 __all__ = ["Context", "has_sudo"]
@@ -26,10 +29,27 @@ def has_sudo() -> bool:
         return False
 
 
-@attrs.define(frozen=True)
+def parse_os_version() -> pv.Version:
+    version = distro.version(best=True)
+    try:
+        return pv.parse(version)
+    except pv.InvalidVersion:
+        return pv.Version("1!0.0")
+
+
+@dataclass(frozen=True)
 class Context(Singleton):
-    project_root: Path = attrs.field(default=PROJECT_ROOT)
-    has_sudo: bool = attrs.field(factory=has_sudo)
+    args: Args
+
+    os_id: str = distro.id()
+    os_version: pv.Version = parse_os_version()
+
+    project_root: Path = PROJECT_ROOT
+    is_root: bool = os.geteuid() == 0
+    has_sudo: bool = has_sudo()
 
     # check if it's a byted devbox
-    byted: bool = False
+    byted: bool = field(init=False)
+
+    def __post_init__(self):
+        object.__setattr__(self, "byted", self.args.byted)

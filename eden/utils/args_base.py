@@ -33,7 +33,7 @@ class ArgsBase(Tap, Singleton, ABC):
 
     @final
     def __init__(self, args: list[str] | None = None, *, frozen: bool = True) -> None:
-        super().__init__(explicit_bool=True, allow_abbrev=False)
+        super().__init__(explicit_bool=False, allow_abbrev=False)
 
         self.parse_args(args=args, known_only=True)
 
