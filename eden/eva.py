@@ -78,11 +78,11 @@ class Eva(Singleton):
 
     def plan(self) -> Generator[list[str], None, None]:
         for pkgs in nx.topological_generations(self._graph):
-            logger.info("Next installation batch: %s", pkgs)
             yield list(pkgs)
 
     def execute(self, targets: list[str]):
         logger.info("=" * 80)
+        logger.info("Executing installation batch: %s", targets)
         # 1. run all pre_install hooks
         for target in targets:
             module = self._modules.get(target)
@@ -96,9 +96,20 @@ class Eva(Singleton):
         for target in targets:
             # 1) add package to the default package manager installation batch
             module = self._modules.get(target)
+
+            # get the package manager for this module
+            if hasattr(module, "pkgmgr"):
+                pkgmgr = getattr(module, "pkgmgr")
+            elif self.sudo:
+                pkgmgr = self.pkgmgr
+            else:
+                # default to use cargo if no sudo
+                pkgmgr = "cargo"
+
             if module is None:
-                pkg_batches[self.pkgmgr].append(target)
+                pkg_batches[pkgmgr].append(target)
                 continue
+
             # 2) skip if the package is a meta package
             if getattr(module, "is_meta_pkg", False):
                 logger.debug("Skipping meta package %s", target)
@@ -109,10 +120,14 @@ class Eva(Singleton):
                 if not self.args.dry_run:
                     getattr(module, "install")()
             else:
-                pkg_batches[getattr(module, "pkgmgr", self.pkgmgr)].append(
-                    getattr(module, "pkgname", target)
-                )
-        logger.info("Package installation batches: %s", dict(pkg_batches))
+
+                pkg = getattr(module, "pkgname", target)
+                if isinstance(pkg, list):
+                    pkg_batches[pkgmgr].extend(pkg)
+                else:
+                    pkg_batches[pkgmgr].append(pkg)
+        if pkg_batches:
+            logger.info("Package installation batches: %s", dict(pkg_batches))
 
         if not self.sudo:
             if "apt" in pkg_batches:
@@ -122,6 +137,5 @@ class Eva(Singleton):
         for target in targets:
             module = self._modules.get(target)
             if module and hasattr(module, "post_install"):
-                logger.info("Running post_install hook for %s", target)
                 if not self.args.dry_run:
                     getattr(module, "post_install")()

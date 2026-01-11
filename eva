@@ -4,6 +4,26 @@ set -euo pipefail
 
 # This script is POSIX-compliant
 
+LIST=0
+INTERACTIVE=0
+args=()
+while [ "$#" -gt 0 ]; do
+    case $1 in
+    -l | --list)
+        LIST=1
+        shift
+        ;;
+    -i | --interactive)
+        INTERACTIVE=1
+        shift
+        ;;
+    *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+done
+
 log() {
     echo "[eden] $*" >&2
 }
@@ -68,9 +88,16 @@ main() {
     create_env
 
     cd ${PROJECT_ROOT}
-    exec micromamba run -n "${ENV_NAME}" python -m eden "$@"
-    # micromamba activate "${ENV_NAME}"
-    # micromamba list
+    if [[ "${LIST}" -eq 1 ]]; then
+        micromamba activate "${ENV_NAME}"
+        micromamba list
+    elif [[ "${INTERACTIVE}" -eq 1 ]]; then
+        log "starting interactive shell in eden environment"
+        exec micromamba run -n "${ENV_NAME}" "${SHELL}" -i
+    else
+        exec micromamba run -n "${ENV_NAME}" python -m eden "$@"
+    fi
+
 }
 
-main "$@"
+main "${args[@]}"

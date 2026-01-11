@@ -1,8 +1,8 @@
+import functools
 import logging
 import os
 from abc import ABC
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from functools import partial
 from typing import final, get_args, get_origin, override
 
 from tap import Tap
@@ -17,6 +17,8 @@ __all__ = [
     "move_arg_from_to",
     "env_to_bool",
     "arg_env_consistent_bool",
+    "csv",
+    "tuple_parser",
 ]
 
 logger = logging.getLogger(__name__)
@@ -65,13 +67,13 @@ class ArgsBase(Tap, Singleton, ABC):
             elif type_origin in {list, set}:
                 elem_type = type_args[0]
                 if elem_type is int:
-                    self.add_argument(arg_flag, type=partial(_str2container, int, type_origin))
+                    self.add_argument(arg_flag, type=functools.partial(csv, int, type_origin))
                 elif elem_type is float:
-                    self.add_argument(arg_flag, type=partial(_str2container, float, type_origin))
+                    self.add_argument(arg_flag, type=functools.partial(csv, float, type_origin))
                 elif elem_type is bool:
-                    self.add_argument(arg_flag, type=partial(_str2container, str2bool, type_origin))
+                    self.add_argument(arg_flag, type=functools.partial(csv, str2bool, type_origin))
                 elif elem_type is str:
-                    self.add_argument(arg_flag, type=partial(_str2container, str, type_origin))
+                    self.add_argument(arg_flag, type=functools.partial(csv, str, type_origin))
             # 3. handle tuple
             elif type_origin is tuple:
 
@@ -80,13 +82,13 @@ class ArgsBase(Tap, Singleton, ABC):
                     elem_type = type_args[0]
                     self.add_argument(
                         arg_flag,
-                        type=partial(_str2container, elem_type, tuple),
+                        type=functools.partial(csv, elem_type, tuple),
                         default=default,
                     )
                 else:
                     self.add_argument(
                         arg_flag,
-                        type=partial(_tuple_parser, type_args),
+                        type=functools.partial(tuple_parser, type_args),
                         default=default,
                     )
 
@@ -170,16 +172,16 @@ def arg_env_consistent_bool(args: Namespace | ArgsBase, arg_name: str, env_var: 
         os.environ[env_var] = "0"
 
 
-def _str2container(elem_type, container_type: type = list, value: str = ""):
+def csv(elem_type, container_type: type = list, value: str = ""):
     if value == "":
         return container_type()
     try:
         return container_type(elem_type(v) for v in value.split(","))
     except Exception as e:
-        raise ArgumentTypeError(f"Invalid CSV {elem_type.__name__} list: {value}") from e
+        raise ArgumentTypeError(f"Invalid {elem_type.__name__} list: {value}") from e
 
 
-def _tuple_parser(type_args, value: str):
+def tuple_parser(type_args, value: str):
     parts = value.split(",")
     if len(parts) != len(type_args):
         raise ArgumentTypeError(f"Expected {len(type_args)} values, got {len(parts)}")

@@ -9,6 +9,7 @@ if eva.sudo:
         "cmake",
         "ninja",
         "clang",
+        "clang-format",
         "ctags",
         "valgrind",
     ]

@@ -6,8 +6,7 @@ is_meta_pkg = True
 
 if eva.sudo:
     depends = [
-        "openjdk",
-        "jdk8",
+        "jdk-openjdk",
         "sdkman",
     ]
 else:

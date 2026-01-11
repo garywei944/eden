@@ -3,6 +3,8 @@ import sh
 from eden.context import Context
 from eden.eva import Eva
 
+sh = sh.bake(_fg=True)
+
 ctx = Context.instance()
 eva = Eva.instance()
 

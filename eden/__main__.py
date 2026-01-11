@@ -56,7 +56,7 @@ def main():
     eva = Eva(
         args=args,
         ctx=ctx,
-        targets=["eden_all"],
+        targets=[f"eden_{t}" for t in args.targets],
     )
     logger.info("eva: %s", eva)
 
