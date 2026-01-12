@@ -29,7 +29,7 @@ jobs:
           docker build \
             --build-arg BASE_IMAGE=${{ matrix.image }} \
             --build-arg MODE=${{ matrix.mode }} \
-            -t ci:test .
+            -t ci:test ci/
 
       - name: Run
         run: |
