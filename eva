@@ -117,6 +117,7 @@ create_env() {
 }
 
 main() {
+    ensure_basics
     install_micromamba
     init_micromamba
     create_env
