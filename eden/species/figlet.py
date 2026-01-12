@@ -1,3 +1,4 @@
+import os
 import shutil
 from pathlib import Path
 
@@ -22,4 +23,5 @@ if not eva.sudo:
                 text = text.replace("/usr/local", f"{Path.home()}/.local")
                 path.write_text(text, encoding="utf-8")
 
+                sh.make(f"-j{str(os.cpu_count() or 1)}")
                 sh.make.install()

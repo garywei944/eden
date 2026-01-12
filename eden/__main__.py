@@ -40,10 +40,13 @@ def main():
         raise RuntimeError("Running as root on Arch is not supported")
 
     # 1. create projects, sandbox, and byted folders
-    (Path.home() / "projects").mkdir(exist_ok=True, parents=True)
-    (Path.home() / "sandbox").mkdir(exist_ok=True, parents=True)
+    home = Path.home()
+    (home / ".local" / "bin").mkdir(exist_ok=True, parents=True)
+    (home / ".local" / "share").mkdir(exist_ok=True, parents=True)
+    (home / "projects").mkdir(exist_ok=True, parents=True)
+    (home / "sandbox").mkdir(exist_ok=True, parents=True)
     if ctx.byted:
-        (Path.home() / "byted").mkdir(exist_ok=True, parents=True)
+        (home / "byted").mkdir(exist_ok=True, parents=True)
 
     # TODO(gary): set up proxy
 

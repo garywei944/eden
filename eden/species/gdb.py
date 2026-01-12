@@ -17,7 +17,6 @@ libbz2-dev liblzma-dev binutils-dev zlib1g-dev \
 """
 
 import io
-import multiprocessing
 import os
 import shutil
 import tarfile
@@ -75,7 +74,7 @@ def _install():
                     pass
 
                 sh.Command("../configure")(build_args)
-                sh.make(f"-j{multiprocessing.cpu_count()}")
+                sh.make(f"-j{str(os.cpu_count() or 1)}")
                 if eva.sudo:
                     sh.sudo.make.install()
                 else:

@@ -48,13 +48,14 @@ base_depends = [
     "broot",
     "lolcat",
     "figlet",
-    "neofetch",
+    # "neofetch",
+    "fastfetch",
 ]
 
 
 if eva.sudo:
     depends = system_depends + base_depends
-    if ctx.os_id in ["ubuntu", "debian"]:
+    if ctx.os_id == "ubuntu":
         depends += ["software-properties-common", "apt-transport-https"]
 else:
     depends = base_depends

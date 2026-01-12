@@ -1,3 +1,4 @@
+import os
 import shutil
 from pathlib import Path
 
@@ -33,6 +34,7 @@ else:
         sh.python3("-m", "pip", "install", "--upgrade", "--break-system-packages", "bpytop")
         sh.git.clone("--depth", "1", "https://github.com/aristocratos/bashtop.git", "/tmp/bashtop")
         with sh.pushd("/tmp/bashtop"):
+            sh.make(f"-j{str(os.cpu_count() or 1)}")
             if eva.sudo:
                 sh.sudo.make.install()
             else:

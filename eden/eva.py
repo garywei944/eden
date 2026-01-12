@@ -42,6 +42,7 @@ class Eva(Singleton):
 
     def build_graph(self):
         stack = self.targets.copy() + ["pkgmgr"]
+        optdepends: list[tuple[str, str]] = []
 
         while stack:
             target = stack.pop()
@@ -61,7 +62,15 @@ class Eva(Singleton):
                 if dep not in self._graph.nodes:
                     stack.append(dep)
                 self._graph.add_edge(dep, target)
+            opt_deps = getattr(module, "optdepends", [])
+            for dep in opt_deps:
+                optdepends.append((dep, target))
         logger.info("Eva initialized with targets: %s", self.targets)
+
+        # add optional dependencies only if they are already in the graph
+        for dep, target in optdepends:
+            if dep in self._graph.nodes:
+                self._graph.add_edge(dep, target)
 
         if not nx.is_directed_acyclic_graph(self._graph):
             logger.warning(
