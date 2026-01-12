@@ -54,6 +54,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     procps \
     build-essential \
     zip unzip \
+    git \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
@@ -61,6 +62,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     procps-ng \
     base-devel \
     zip unzip \
+    git \
     && pacman -Scc --noconfirm; \
     fi; \
     fi
