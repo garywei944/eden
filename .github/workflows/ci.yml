@@ -13,11 +13,12 @@ jobs:
       matrix:
         image:
           - archlinux:latest
+          - debian:latest
           - debian:12
           - debian:10
+          - ubuntu:latest
           - ubuntu:24.04
           - ubuntu:22.04
-          - ubuntu:20.04
         mode:
           - root
           - eva

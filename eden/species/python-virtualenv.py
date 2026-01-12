@@ -12,7 +12,7 @@ if eva.sudo:
         depends = ["python-pip"]
 
         def install():
-            if (eva.sudo and ctx.os_id == "ubuntu" and ctx.os_version < pv.Version("22.04")) or (
+            if (eva.sudo and ctx.os_id == "ubuntu" and ctx.os_version < pv.Version("24.04")) or (
                 eva.sudo and ctx.os_id == "debian" and ctx.os_version.major < 12
             ):
                 sh.sudo.python3("-m", "pip", "install", "--upgrade", "virtualenv")

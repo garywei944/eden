@@ -55,6 +55,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     build-essential \
     zip unzip \
     git \
+    libgmp-dev libmpfr-dev libreadline-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
