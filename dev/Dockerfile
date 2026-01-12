@@ -31,8 +31,9 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     echo "Unsupported base image" && exit 1; \
     fi
 
-RUN useradd -m eva -u 1000; \
-    useradd -m adam -u 1001; \
+RUN useradd -m eva -u 1001; \
+    useradd -m adam -u 1002; \
+    mkdir -p /etc/sudoers.d; \
     echo "eva ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/eva; \
     chmod 0440 /etc/sudoers.d/eva;
 
