@@ -15,7 +15,7 @@ requires_pkgmgr = False
 
 def install():
     if ctx.is_root:
-        if eva.pkgmgr == "pacman":
+        if ctx.os_id == "arch":
             sh.pacman("-Syu", "--noconfirm", "sudo")
         elif eva.pkgmgr == "apt":
             sh.apt("install", "-y", "sudo")

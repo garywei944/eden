@@ -16,6 +16,8 @@ requires_pkgmgr = False
 
 if eva.sudo and eva.pkgmgr == "apt":
     pkgname = "golang"
+elif eva.sudo and ctx.os_id == "arch":
+    requires_pkgmgr = True
 elif not eva.sudo:
 
     def install():

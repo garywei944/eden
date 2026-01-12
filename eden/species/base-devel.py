@@ -9,8 +9,5 @@ requires_pkgmgr = False
 if eva.sudo:
     depends = ["sudo"]
 
-if ctx.os_id == "arch":
-    if eva.sudo:
-        pkgmgr = "pacman"
-    else:
-        pkgname = None
+if eva.sudo and ctx.os_id == "arch":
+    pkgmgr = "pacman"

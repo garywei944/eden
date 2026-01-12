@@ -14,5 +14,5 @@ if eva.sudo:
 
 if eva.sudo and ctx.os_id == "arch":
     depends += ["yay", "paru"]
-
-depends += ["rust", "go"]
+else:
+    depends += ["rust", "go"]

@@ -123,7 +123,7 @@ class Eva(Singleton):
                 pkg = getattr(module, "pkgname", target)
                 if isinstance(pkg, list):
                     pkg_batches[pkgmgr].extend(pkg)
-                else:
+                elif pkg is not None:
                     pkg_batches[pkgmgr].append(pkg)
 
         for pkgmgr, pkgs in pkg_batches.items():
