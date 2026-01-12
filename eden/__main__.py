@@ -5,6 +5,7 @@ from eden.utils.logging_utils import setup_root_logger
 setup_root_logger()
 
 logging.getLogger("sh").setLevel(logging.INFO)
+logging.getLogger("httpcore").setLevel(logging.INFO)
 
 from pathlib import Path
 
@@ -56,7 +57,9 @@ def main():
     eva = Eva(
         args=args,
         ctx=ctx,
-        targets=[f"eden_{t}" for t in args.targets],
+        targets=[
+            f"eden_{t}" if Path(f"eden/species/eden_{t}.py").exists() else t for t in args.targets
+        ],
     )
     logger.info("eva: %s", eva)
 

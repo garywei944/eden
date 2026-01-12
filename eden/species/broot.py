@@ -17,7 +17,12 @@ elif eva.pkgmgr == "apt":
             "libxcb-shape0-dev",
             "libxcb-xfixes0-dev",
         ]
-    pkgmgr = "cargo"
+
+    def install():
+        sh.cargo.install("--locked", "--features", "clipboard", "broot")
+
+else:
+    depends = ["rust"]
 
     def install():
         sh.cargo.install("--locked", "--features", "clipboard", "broot")

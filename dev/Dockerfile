@@ -27,6 +27,8 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     less \
     procps \
     sudo \
+    build-essential \
+    zip unzip \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null 2>&1; then \
     pacman -Syu --noconfirm \
@@ -38,6 +40,8 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     less \
     procps-ng \
     sudo \
+    base-devel \
+    zip unzip \
     && pacman -Scc --noconfirm; \
     else \
     echo "Unsupported base image" && exit 1; \

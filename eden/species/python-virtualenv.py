@@ -1,6 +1,10 @@
+from packaging import version as pv
+
+from eden.context import Context
 from eden.eva import Eva
 from eden.sh import esh as sh
 
+ctx = Context.instance()
 eva = Eva.instance()
 
 if eva.sudo:
@@ -8,6 +12,11 @@ if eva.sudo:
         depends = ["python-pip"]
 
         def install():
-            sh.sudo.python3(
-                "-m", "pip", "install", "--upgrade", "--break-system-packages", "virtualenv"
-            )
+            if (eva.sudo and ctx.os_id == "ubuntu" and ctx.os_version < pv.Version("22.04")) or (
+                eva.sudo and ctx.os_id == "debian" and ctx.os_version.major < 12
+            ):
+                sh.sudo.python3("-m", "pip", "install", "--upgrade", "virtualenv")
+            else:
+                sh.sudo.python3(
+                    "-m", "pip", "install", "--upgrade", "--break-system-packages", "virtualenv"
+                )

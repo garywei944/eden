@@ -8,6 +8,7 @@ eva = Eva.instance()
 if not eva.sudo:
     depends = ["rust"]
     pkgmgr = "cargo"
+    pkgname = "fd-find"
 
 
 if eva.sudo and eva.pkgmgr == "apt":

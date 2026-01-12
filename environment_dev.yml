@@ -12,6 +12,7 @@ dependencies:
 
   # essential functionality
   - typed-argument-parser
+  - httpx
 
   # algorithms
   - networkx

@@ -50,16 +50,16 @@ log "PATH: ${PATH}"
 ensure_basics() {
     # ensure curl and procps are installed
     to_install=()
-    if ! command_exists curl; then
-        to_install+=("curl")
-    fi
-    if ! command_exists ps; then
-        to_install+=("procps")
-    fi
 
-    if [ ${#to_install[@]} -eq 0 ]; then
-        return
+    if ! command_exists ps; then
+        if command_exists apt-get; then
+            to_install+=("procps")
+        elif command_exists pacman; then
+            to_install+=("procps-ng")
+        fi
     fi
+    command_exists curl || to_install+=("curl")
+    [ ${#to_install[@]} -eq 0 ] && return
 
     log "installing basic dependencies: ${to_install[*]}"
 
