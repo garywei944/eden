@@ -1,6 +1,11 @@
-ARG BASE_IMAGE
-ARG MODE
+# ---------- base image ----------
+ARG BASE_IMAGE=debian:12
+
 FROM ${BASE_IMAGE}
+
+# ---------- build mode ----------
+ARG MODE
+ENV MODE=${MODE}
 
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
@@ -29,6 +34,9 @@ RUN if [[ "$MODE" != "root" ]]; then \
     chmod 0440 /etc/sudoers.d/eva; \
     fi
 
-WORKDIR /eden
+# --------------------------------------------------
+# Copy repo & default command
+# --------------------------------------------------
 COPY . /eden
-CMD ["bash", "eva"]
+WORKDIR /eden
+CMD ["bash"]
