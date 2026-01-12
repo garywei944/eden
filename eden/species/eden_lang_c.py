@@ -12,4 +12,5 @@ if eva.sudo:
         "clang-format",
         "ctags",
         "valgrind",
+        "pwndbg",
     ]
