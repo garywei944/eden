@@ -10,6 +10,10 @@ if not eva.sudo:
     pkgmgr = "cargo"
 
 if eva.sudo and eva.pkgmgr == "apt":
+    if eva.sudo and ctx.os_id == "debian" and ctx.os_version.major < 12:
+        depends = ["rust"]
+        pkgmgr = "cargo"
+    else:
 
-    def post_install():
-        sh.sudo.ln("-sf", "/usr/bin/batcat", "/usr/local/bin/bat")
+        def post_install():
+            sh.sudo.ln("-sf", "/usr/bin/batcat", "/usr/local/bin/bat")

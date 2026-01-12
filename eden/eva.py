@@ -45,7 +45,6 @@ class Eva(Singleton):
 
         while stack:
             target = stack.pop()
-            logger.debug("Processing target: %s", target)
             try:
                 module = importlib.import_module(f"eden.species.{target}")
             except ModuleNotFoundError:
@@ -130,9 +129,9 @@ class Eva(Singleton):
                 if pkgmgr == "apt":
                     sh.sudo.apt("install", "-y", *pkgs)
                 elif pkgmgr == "pacman":
-                    sh.sudo.pacman("-S", "--noconfirm", *pkgs)
-                elif pkgmgr in ["yay", "paru"]:
-                    sh.Command(pkgmgr)(["-S", "--noconfirm", *pkgs])
+                    sh.sudo.pacman("-S", "--noconfirm", "--needed", *pkgs)
+                elif pkgmgr in ["pacman", "yay", "paru"]:
+                    sh.Command(pkgmgr)(["-S", "--noconfirm", "--needed", *pkgs])
                 elif pkgmgr == "cargo":
                     sh.cargo.install(*pkgs)
                 else:

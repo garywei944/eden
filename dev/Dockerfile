@@ -4,6 +4,8 @@ ARG BASE_IMAGE=debian:12
 
 FROM ${BASE_IMAGE}
 
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+
 # Detect distro and install dependencies accordingly
 RUN if command -v apt-get >/dev/null 2>&1; then \
     . /etc/os-release; \

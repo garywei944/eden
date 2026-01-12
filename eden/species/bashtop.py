@@ -9,7 +9,7 @@ ctx = Context.instance()
 eva = Eva.instance()
 
 if eva.sudo and ctx.os_id == "arch":
-    pkgname = "bashtop-git"
+    pass
 elif eva.sudo and ctx.os_id == "ubuntu":
     depends = ["software-properties-common"]
 
@@ -17,7 +17,7 @@ elif eva.sudo and ctx.os_id == "ubuntu":
         sh.sudo.add_apt_repository("-y", "ppa:bashtop-monitor/bashtop")
 
 else:
-    depends = ["git", "eden_devel"]
+    depends = ["git", "base-devel", "python", "python-pip"]
 
     def install():
         """

@@ -15,8 +15,6 @@ if (
     depends = ["rust"]
     pkgmgr = "cargo"
     pkgname = "sd"
-elif eva.sudo and ctx.os_id == "arch":
-    pkgname = "sd-git"
 
 if ctx.byted:
 

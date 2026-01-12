@@ -6,7 +6,7 @@ ctx = Context.instance()
 eva = Eva.instance()
 
 if eva.sudo and ctx.os_id == "arch":
-    pkgname = "broot-git"
+    pass
 elif eva.pkgmgr == "apt":
     depends = ["rust"]
     if eva.sudo:

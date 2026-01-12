@@ -11,14 +11,16 @@ eva = Eva.instance()
 
 requires_pkgmgr = False
 
-if eva.sudo and eva.pkgmgr == "apt":
-    pkgname = "golang"
-elif eva.sudo and ctx.os_id == "arch":
-    requires_pkgmgr = True
-elif not eva.sudo:
+if not eva.sudo or (eva.sudo and ctx.os_id == "debian" and ctx.os_version.major < 12):
+    depends = ["curl", "base-devel"]
 
     def install():
         sh.sh(_in=curl("https://webi.sh/golang"))
+
+elif eva.sudo and eva.pkgmgr == "apt":
+    pkgname = "golang"
+elif eva.sudo and ctx.os_id == "arch":
+    requires_pkgmgr = True
 
 
 def post_install():

@@ -1,5 +1,9 @@
+import logging
+
 from eden.context import Context
 from eden.eva import Eva
+
+logger = logging.getLogger(__name__)
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -7,6 +11,7 @@ eva = Eva.instance()
 is_meta_pkg = True
 
 sudo_only_depends = [
+    "base-devel",
     # build tools
     "autoconf",
     "pkg-config",
@@ -33,9 +38,9 @@ base_depends = [
 if eva.sudo:
     depends = sudo_only_depends + base_depends
 
-    if ctx.os_id in ["ubuntu", "debian"]:
-        depends += ["build-essential"]
-    elif ctx.os_id == "arch":
-        depends += ["base-devel"]
+    # ! debian 10 doesn't have checkinstall package
+    if ctx.os_id == "debian" and ctx.os_version.major < 12:
+        logger.warning("Removing 'checkinstall' from depends for debian < 12")
+        depends.remove("checkinstall")
 else:
     depends = base_depends

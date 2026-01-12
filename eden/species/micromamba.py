@@ -1,3 +1,5 @@
+import os
+
 from eden.context import Context
 from eden.eva import Eva
 from eden.sh import curl
@@ -7,9 +9,12 @@ ctx = Context.instance()
 eva = Eva.instance()
 
 if eva.sudo and ctx.os_id == "arch":
-    pkgname = "micromamba-bin"
+    pkgname = ["micromamba-bin", "miniconda3"]
 else:
     depends = ["curl"]
 
     def install():
-        sh.bash(_in=curl("https://micro.mamba.pm/install.sh"))
+        env = os.environ.copy()
+        env["SHELL"] = "/bin/bash"
+
+        sh.bash(_in=curl("https://micro.mamba.pm/install.sh"), _env=env)

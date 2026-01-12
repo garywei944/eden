@@ -4,7 +4,11 @@ from eden.eva import Eva
 ctx = Context.instance()
 eva = Eva.instance()
 
-if not eva.sudo or (eva.sudo and ctx.os_id == "ubuntu" and ctx.os_version.major < 23):
+if (
+    not eva.sudo
+    or (eva.sudo and ctx.os_id == "ubuntu" and ctx.os_version.major < 23)
+    or (eva.sudo and ctx.os_id == "debian" and ctx.os_version.major < 12)
+):
     depends = ["rust"]
     pkgmgr = "cargo"
     pkgname = "lsd"

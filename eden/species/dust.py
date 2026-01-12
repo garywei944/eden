@@ -8,5 +8,3 @@ if not eva.sudo or (eva.sudo and eva.pkgmgr == "apt"):
     depends = ["rust"]
     pkgmgr = "cargo"
     pkgname = "du-dust"
-elif ctx.os_id == "arch":
-    pkgname = "dust-git"

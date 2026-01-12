@@ -11,3 +11,6 @@ if eva.sudo:
 
 if eva.sudo and ctx.os_id == "arch":
     pkgmgr = "pacman"
+elif eva.sudo and eva.pkgmgr == "apt":
+    pkgmgr = "apt"
+    pkgname = "build-essential"
