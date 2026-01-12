@@ -1,13 +1,9 @@
 import shutil
-import sys
 from pathlib import Path
-
-import sh
 
 from eden.context import Context
 from eden.eva import Eva
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
+from eden.sh import esh as sh
 
 ctx = Context.instance()
 eva = Eva.instance()

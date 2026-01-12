@@ -1,21 +1,18 @@
 import importlib
 import logging
-import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Generator, Literal
 
 import networkx as nx
-import sh
 from dagviz import visualize_dag
 
 from eden.args import Args
 from eden.context import Context
+from eden.sh import esh as sh
 from eden.utils.singleton import Singleton
 
 logger = logging.getLogger(__name__)
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
 
 
 @dataclass

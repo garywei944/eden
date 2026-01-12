@@ -1,13 +1,10 @@
 import os
-import sys
 from pathlib import Path
-
-import sh
 
 from eden.context import Context
 from eden.eva import Eva
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
+from eden.sh import curl
+from eden.sh import esh as sh
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -21,7 +18,7 @@ elif eva.sudo and ctx.os_id == "arch":
 elif not eva.sudo:
 
     def install():
-        sh.sh(_in=sh.curl("-sS", "https://webi.sh/golang"))
+        sh.sh(_in=curl("https://webi.sh/golang"))
 
 
 def post_install():

@@ -4,10 +4,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import distro
-import sh
 from packaging import version as pv
 
 from eden.args import Args
+from eden.sh import esh as sh
 from eden.utils.singleton import Singleton
 
 __all__ = ["Context", "has_sudo"]

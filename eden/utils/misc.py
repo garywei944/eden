@@ -1,4 +1,4 @@
-import sh
+from eden.sh import esh as sh
 
 __all__ = ["command_exists"]
 

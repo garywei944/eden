@@ -1,11 +1,7 @@
-import sys
-
-import sh
-
 from eden.context import Context
 from eden.eva import Eva
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
+from eden.sh import curl
+from eden.sh import esh as sh
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -16,4 +12,4 @@ else:
     depends = ["curl", "zip", "unzip"]
 
     def install():
-        sh.bash(_in=sh.curl("-s", "https://get.sdkman.io"))
+        sh.bash(_in=curl("https://get.sdkman.io"))

@@ -1,13 +1,10 @@
 import os
-import sys
 from pathlib import Path
-
-import sh
 
 from eden.context import Context
 from eden.eva import Eva
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
+from eden.sh import curl
+from eden.sh import esh as sh
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -22,12 +19,7 @@ else:
 
     def install():
         # curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        sh.sh(
-            "-s",
-            "--",
-            "-y",
-            _in=sh.curl("--proto", "=https", "--tlsv1.2", "-sSf", "https://sh.rustup.rs"),
-        )
+        sh.sh("-s", "--", "-y", _in=curl("--proto", "=https", "--tlsv1.2", "https://sh.rustup.rs"))
 
 
 def post_install():

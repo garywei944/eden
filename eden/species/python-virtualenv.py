@@ -1,10 +1,5 @@
-import sys
-
-import sh
-
 from eden.eva import Eva
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
+from eden.sh import esh as sh
 
 eva = Eva.instance()
 

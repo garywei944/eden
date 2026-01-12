@@ -6,19 +6,16 @@ setup_root_logger()
 
 logging.getLogger("sh").setLevel(logging.INFO)
 
-import sys
 from pathlib import Path
 
-import sh
 from packaging import version as pv
 
 from eden.args import Args
 from eden.context import Context
 from eden.eva import Eva
+from eden.sh import esh as sh
 
 logger = logging.getLogger(__name__)
-
-sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
 
 
 def main():
