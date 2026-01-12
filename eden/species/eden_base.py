@@ -21,7 +21,7 @@ system_depends = [
     "gnupg",
     "ca-certificates",
     "lsb-release",
-    "jg",
+    "jq",
     "traceroute",
     "nmap",
     "netcat",
@@ -32,7 +32,6 @@ system_depends = [
 ]
 
 base_depends = [
-    "pkgmgr",
     "fzf",
     "ripgrep",
     "fd",

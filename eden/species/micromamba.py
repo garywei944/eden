@@ -1,9 +1,11 @@
+import sys
+
 import sh
 
 from eden.context import Context
 from eden.eva import Eva
 
-sh = sh.bake(_fg=True)
+sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
 
 ctx = Context.instance()
 eva = Eva.instance()

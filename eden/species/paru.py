@@ -1,0 +1,1 @@
+requires_pkgmgr = False

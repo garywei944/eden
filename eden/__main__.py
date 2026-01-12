@@ -6,6 +6,7 @@ setup_root_logger()
 
 logging.getLogger("sh").setLevel(logging.INFO)
 
+import sys
 from pathlib import Path
 
 import sh
@@ -17,7 +18,7 @@ from eden.eva import Eva
 
 logger = logging.getLogger(__name__)
 
-sh = sh.bake(_fg=True)
+sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
 
 
 def main():
@@ -62,7 +63,6 @@ def main():
 
     eva.build_graph()
 
-    eva.ensure_sudo()
     for targets in eva.plan():
         eva.execute(targets)
 

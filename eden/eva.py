@@ -1,5 +1,6 @@
 import importlib
 import logging
+import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Generator, Literal
@@ -10,10 +11,11 @@ from dagviz import visualize_dag
 
 from eden.args import Args
 from eden.context import Context
-from eden.utils.misc import command_exists
 from eden.utils.singleton import Singleton
 
 logger = logging.getLogger(__name__)
+
+sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
 
 
 @dataclass
@@ -41,28 +43,22 @@ class Eva(Singleton):
         else:
             raise RuntimeError(f"Unsupported OS: {self.ctx.os_id}")
 
-    def ensure_sudo(self):
-        if not self.sudo:
-            return
-        if self.ctx.is_root and not command_exists("sudo"):
-            logger.info("Installing sudo as root")
-            if self.pkgmgr == "apt":
-                sh.apt.install("-y", "sudo")
-            elif self.ctx.os_id == "arch":
-                sh.pacman("-Syu", "--noconfirm", "sudo")
-            else:
-                raise RuntimeError(f"Unsupported OS: {self.ctx.os_id}")
-
     def build_graph(self):
-        stack = self.targets.copy()
+        stack = self.targets.copy() + ["pkgmgr"]
 
         while stack:
             target = stack.pop()
+            logger.debug("Processing target: %s", target)
             try:
                 module = importlib.import_module(f"eden.species.{target}")
             except ModuleNotFoundError:
-                self._graph.add_node(target)
+                # self._graph.add_node(target)
+                self._graph.add_edge("pkgmgr", target)
                 continue
+
+            if getattr(module, "requires_pkgmgr", True):
+                self._graph.add_edge("pkgmgr", target)
+
             self._modules[target] = module
             deps = getattr(module, "depends", [])
             for dep in deps:
@@ -72,6 +68,9 @@ class Eva(Singleton):
         logger.info("Eva initialized with targets: %s", self.targets)
 
         if not nx.is_directed_acyclic_graph(self._graph):
+            logger.warning(
+                "All cycles in the dependency graph:\n%s", list(nx.simple_cycles(self._graph))
+            )
             raise RuntimeError("Dependency graph has cycles!")
 
         logger.debug("Dependency graph edges:\n%s", visualize_dag(self._graph, round_angle=True))
@@ -126,8 +125,20 @@ class Eva(Singleton):
                     pkg_batches[pkgmgr].extend(pkg)
                 else:
                     pkg_batches[pkgmgr].append(pkg)
-        if pkg_batches:
-            logger.info("Package installation batches: %s", dict(pkg_batches))
+
+        for pkgmgr, pkgs in pkg_batches.items():
+            logger.info("Installing packages with %s: %s", pkgmgr, pkgs)
+            if not self.args.dry_run:
+                if pkgmgr == "apt":
+                    sh.sudo.apt("install", "-y", *pkgs)
+                elif pkgmgr == "pacman":
+                    sh.sudo.pacman("-S", "--noconfirm", *pkgs)
+                elif pkgmgr in ["yay", "paru"]:
+                    sh.Command(pkgmgr)(["-S", "--noconfirm", *pkgs])
+                elif pkgmgr == "cargo":
+                    sh.cargo.install(*pkgs)
+                else:
+                    raise RuntimeError(f"Unsupported package manager: {pkgmgr}")
 
         if not self.sudo:
             if "apt" in pkg_batches:

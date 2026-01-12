@@ -1,8 +1,10 @@
+import sys
+
 import sh
 
 from eden.eva import Eva
 
-sh = sh.bake(_fg=True)
+sh = sh.bake(_out=sys.stdout, _err=sys.stderr)
 
 eva = Eva.instance()
 
