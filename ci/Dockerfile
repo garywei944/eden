@@ -50,11 +50,13 @@ RUN if [[ "$MODE" != "root" ]]; then \
 RUN if [[ "$MODE" == "adam" ]]; then \
     if command -v apt-get >/dev/null; then \
     apt-get update && apt-get install -y \
+    curl \
     procps \
     build-essential \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
+    curl \
     procps-ng \
     base-devel \
     && pacman -Scc --noconfirm; \
