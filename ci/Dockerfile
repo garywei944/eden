@@ -14,10 +14,22 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 # --------------------------------------------------
 RUN \
     if command -v apt-get >/dev/null; then \
-    apt-get update && apt-get install -y bash ca-certificates && rm -rf /var/lib/apt/lists/*; \
+    . /etc/os-release; \
+    if [[ "$VERSION_CODENAME" == "buster" ]]; then \
+    sed -i \
+    -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' \
+    -e 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
+    /etc/apt/sources.list; \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid; \
+    fi; \
+    apt-get update; \
+    apt-get install -y bash ca-certificates; \
+    rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
-    pacman -Sy --noconfirm bash ca-certificates && pacman -Scc --noconfirm; \
+    pacman -Sy --noconfirm bash ca-certificates; \
+    pacman -Scc --noconfirm; \
     fi
+
 
 # --------------------------------------------------
 # Conditional sudo + users
@@ -28,8 +40,8 @@ RUN if [[ "$MODE" != "root" ]]; then \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm sudo && pacman -Scc --noconfirm; \
     fi; \
-    useradd -m eva -u 1000; \
-    useradd -m adam -u 1001; \
+    useradd -m eva -u 1001; \
+    useradd -m adam -u 1002; \
     echo "eva ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/eva; \
     chmod 0440 /etc/sudoers.d/eva; \
     fi
@@ -39,4 +51,4 @@ RUN if [[ "$MODE" != "root" ]]; then \
 # --------------------------------------------------
 COPY . /eden
 WORKDIR /eden
-CMD ["bash"]
+CMD ["bash", "eva"]
