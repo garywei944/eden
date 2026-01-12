@@ -14,7 +14,7 @@ elif eva.sudo and ctx.os_id == "ubuntu":
     depends = ["software-properties-common"]
 
     def pre_install():
-        sh.sudo.add_apt_repository("-y", "ppa:bashtop-monitor/bashtop")
+        sh.sudo("add-apt-repository", "-y", "ppa:bashtop-monitor/bashtop")
 
 else:
     depends = ["git", "base-devel", "python", "python-pip"]
