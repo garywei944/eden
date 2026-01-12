@@ -54,6 +54,26 @@ install_micromamba() {
 
     log "installing micromamba (silent)"
 
+    if ! command_exists curl; then
+        if command_exists apt-get; then
+            # if is root
+            if [[ "$(id -u)" -eq 0 ]]; then
+                apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+            else
+                sudo apt-get update && sudo apt-get install -y curl && sudo rm -rf /var/lib/apt/lists/*
+            fi
+        elif command_exists pacman; then
+            if [[ "$(id -u)" -eq 0 ]]; then
+                pacman -Sy --noconfirm curl && pacman -Scc --noconfirm
+            else
+                sudo pacman -Sy --noconfirm curl && sudo pacman -Scc --noconfirm
+            fi
+        else
+            log "Error: curl is required to install micromamba"
+            exit 1
+        fi
+    fi
+
     BIN_FOLDER="${MAMBA_ROOT_PREFIX}/bin" \
         INIT_YES=no \
         CONDA_FORGE_YES=no \

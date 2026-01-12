@@ -46,9 +46,18 @@ RUN if [[ "$MODE" != "root" ]]; then \
     chmod 0440 /etc/sudoers.d/eva; \
     fi
 
+RUN if [[ "$MODE" != "root" ]]; then \
+    if command -v apt-get >/dev/null; then \
+    apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*; \
+    elif command -v pacman >/dev/null; then \
+    pacman -Sy --noconfirm curl && pacman -Scc --noconfirm; \
+    fi; \
+    fi
+
 # --------------------------------------------------
 # Copy repo & default command
 # --------------------------------------------------
 COPY . /eden
+RUN chmod 777 /eden
 WORKDIR /eden
 CMD ["bash", "eva"]
