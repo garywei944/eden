@@ -6,6 +6,14 @@ FROM ${BASE_IMAGE}
 
 # Detect distro and install dependencies accordingly
 RUN if command -v apt-get >/dev/null 2>&1; then \
+    . /etc/os-release; \
+    if [[ "$VERSION_CODENAME" == "buster" ]]; then \
+    sed -i \
+    -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' \
+    -e 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
+    /etc/apt/sources.list; \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid; \
+    fi; \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -16,6 +24,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     vim \
     less \
     procps \
+    sudo \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null 2>&1; then \
     pacman -Syu --noconfirm \
@@ -26,6 +35,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     vim \
     less \
     procps-ng \
+    sudo \
     && pacman -Scc --noconfirm; \
     else \
     echo "Unsupported base image" && exit 1; \
@@ -33,7 +43,6 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
 
 RUN useradd -m eva -u 1001; \
     useradd -m adam -u 1002; \
-    mkdir -p /etc/sudoers.d; \
     echo "eva ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/eva; \
     chmod 0440 /etc/sudoers.d/eva;
 

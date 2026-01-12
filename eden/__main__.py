@@ -35,6 +35,8 @@ def main():
         raise RuntimeError(f"Unsupported Ubuntu version: {ctx.os_version.major}")
     if ctx.os_id == "debian" and ctx.os_version < pv.Version("10"):
         raise RuntimeError(f"Unsupported Debian version: {ctx.os_version.major}")
+    if ctx.is_root and ctx.os_id == "arch":
+        raise RuntimeError("Running as root on Arch is not supported")
 
     # 1. create projects, sandbox, and byted folders
     (Path.home() / "projects").mkdir(exist_ok=True, parents=True)
@@ -45,11 +47,12 @@ def main():
     # TODO(gary): set up proxy
 
     # update package manager
-    if ctx.is_root:
-        update_pkg_manager()
-    elif ctx.has_sudo:
-        with sh.contrib.sudo:
+    if not args.dry_run:
+        if ctx.is_root:
             update_pkg_manager()
+        elif ctx.has_sudo:
+            with sh.contrib.sudo:
+                update_pkg_manager()
 
     eva = Eva(
         args=args,

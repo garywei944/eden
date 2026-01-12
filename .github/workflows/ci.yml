@@ -21,6 +21,9 @@ jobs:
           - root
           - eva
           - adam
+        exclude:
+          - image: archlinux:latest
+            mode: root # Arch image does not support root mode in this setup
     steps:
       - uses: actions/checkout@v4
 

@@ -46,11 +46,18 @@ RUN if [[ "$MODE" != "root" ]]; then \
     chmod 0440 /etc/sudoers.d/eva; \
     fi
 
-RUN if [[ "$MODE" != "root" ]]; then \
+# necessary build-essentials has to be presented for user 'adam'
+RUN if [[ "$MODE" == "adam" ]]; then \
     if command -v apt-get >/dev/null; then \
-    apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*; \
+    apt-get update && apt-get install -y \
+    procps \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
-    pacman -Sy --noconfirm curl && pacman -Scc --noconfirm; \
+    pacman -Sy --noconfirm \
+    procps-ng \
+    base-devel \
+    && pacman -Scc --noconfirm; \
     fi; \
     fi
 

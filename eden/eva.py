@@ -124,6 +124,7 @@ class Eva(Singleton):
                     pkg_batches[pkgmgr].append(pkg)
 
         for pkgmgr, pkgs in pkg_batches.items():
+            pkgs = list(set(pkgs))  # deduplicate
             logger.info("Installing packages with %s: %s", pkgmgr, pkgs)
             if not self.args.dry_run:
                 if pkgmgr == "apt":
