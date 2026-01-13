@@ -59,6 +59,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     cmake \
     openssh-client openssh-server \
     python3 python3-pip \
+    gnupg \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
@@ -70,6 +71,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     cmake \
     openssh \
     python python-pip \
+    gnupg \
     && pacman -Scc --noconfirm; \
     fi; \
     fi
