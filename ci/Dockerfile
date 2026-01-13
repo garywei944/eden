@@ -58,6 +58,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     libgmp-dev libmpfr-dev libreadline-dev zlib1g-dev \
     cmake \
     openssh-client openssh-server \
+    python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
@@ -68,6 +69,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     git \
     cmake \
     openssh \
+    python python-pip \
     && pacman -Scc --noconfirm; \
     fi; \
     fi

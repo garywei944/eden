@@ -12,7 +12,7 @@ depends = ["openssh"]
 requires_pkgmgr = False
 
 if eva.sudo:
-    depends = ["sudo"]
+    depends.append("sudo")
     if ctx.os_id == "arch":
         pkgmgr = "pacman"
 else:
