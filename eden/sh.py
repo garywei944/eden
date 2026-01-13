@@ -1,4 +1,3 @@
-import os
 import sys
 from pathlib import Path
 
@@ -10,6 +9,16 @@ HOME = Path.home()
 DEFAULT_PATHS = [str(HOME / ".local/bin"), "/usr/local/bin", "/usr/bin", "/bin"]
 
 esh = sh.bake(_out=sys.stdout, _err=sys.stderr)
-which = sh.which
-sys_which = sh.which.bake(_env={**os.environ, "PATH": ":".join(DEFAULT_PATHS)})
+
+
+def which(cmd):
+    """Find the full path to a command in the default PATHs."""
+    return sh.bash("-c", f"command -v {cmd}").strip()
+
+
+def sys_which(cmd):
+    """Find the full path to a command in the system PATH."""
+    return sh.bash("-c", f"command -v {cmd}", _env={"PATH": ":".join(DEFAULT_PATHS)}).strip()
+
+
 curl = sh.curl.bake("-fsSL", _piped=True)

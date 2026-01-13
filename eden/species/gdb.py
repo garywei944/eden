@@ -62,7 +62,7 @@ def _install():
                 ]
 
                 if command_exists("python3", sys_path=True):
-                    build_args.append(f"--with-python={sys_which('python3').strip()}")
+                    build_args.append(f"--with-python={sys_which('python3')}")
 
                 sh.Command("../configure")(build_args)
                 sh.make(f"-j{str(os.cpu_count() or 1)}")
