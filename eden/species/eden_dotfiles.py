@@ -3,7 +3,7 @@
 
 # from eden.sh import esh as sh
 
-depends = ["git"]
+depends = ["git", "eden_config_git"]
 
 
 def install():
