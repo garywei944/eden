@@ -30,6 +30,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     build-essential \
     zip unzip \
     cmake \
+    openssh-client openssh-server \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null 2>&1; then \
     pacman -Syu --noconfirm \
@@ -44,6 +45,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     base-devel \
     zip unzip \
     cmake \
+    openssh \
     && pacman -Scc --noconfirm; \
     else \
     echo "Unsupported base image" && exit 1; \

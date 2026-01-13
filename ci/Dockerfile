@@ -57,6 +57,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     git \
     libgmp-dev libmpfr-dev libreadline-dev zlib1g-dev \
     cmake \
+    openssh-client openssh-server \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
@@ -66,6 +67,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     zip unzip \
     git \
     cmake \
+    openssh \
     && pacman -Scc --noconfirm; \
     fi; \
     fi

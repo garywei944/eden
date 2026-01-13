@@ -8,6 +8,7 @@ from eden.utils.misc import command_exists
 ctx = Context.instance()
 eva = Eva.instance()
 
+depends = ["openssh"]
 requires_pkgmgr = False
 
 if eva.sudo:
@@ -32,5 +33,6 @@ def post_install():
     ```
     """
     Path.home().joinpath(".ssh").mkdir(mode=0o700, parents=True, exist_ok=True)
-    sh.ssh_keygen("-R", "github.com")
+    if Path.home().joinpath(".ssh", "known_hosts").exists():
+        sh.ssh_keygen("-R", "github.com")
     sh.ssh_keyscan("github.com", _out=Path.home() / ".ssh/known_hosts")
