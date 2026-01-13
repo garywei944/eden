@@ -6,6 +6,7 @@ Basically follows the syntax of Arch Linux PKGBUILD files, with some modificatio
 
 - `pkgname`: The name of the package.
 - `depends`: A list of package dependencies required for the package.
+- `optdepends`: A list of optional package dependencies.
 - `is_meta_pkg`: A boolean indicating if the package is a meta package (a group of packages).
 - `requires_pkgmgr`: A boolean indicating if the package requires the package manager to be installed before it can be installed.
 
