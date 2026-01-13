@@ -1,14 +1,15 @@
 import httpx
 
+from eden.sh import DEFAULT_PATHS
 from eden.sh import esh as sh
 
 __all__ = ["command_exists", "download_file"]
 
 
-def command_exists(command: str) -> bool:
+def command_exists(command: str, sys_path: bool = False) -> bool:
     """Check if a command exists in the system PATH."""
     try:
-        sh.Command(command)
+        sh.Command(command, search_paths=DEFAULT_PATHS if sys_path else None)
         return True
     except sh.CommandNotFound:
         return False

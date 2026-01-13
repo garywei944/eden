@@ -6,6 +6,7 @@ from pathlib import Path
 from eden.context import Context
 from eden.eva import Eva
 from eden.sh import esh as sh
+from eden.sh import sys_which
 from eden.utils.misc import command_exists, download_file
 
 ctx = Context.instance()
@@ -60,7 +61,8 @@ def _install():
                     "--enable-tui",
                 ]
 
-                build_args.append(f"--with-python={sh.which('python3')}")
+                if command_exists("python3", sys_path=True):
+                    build_args.append(f"--with-python={sys_which('python3').strip()}")
 
                 sh.Command("../configure")(build_args)
                 sh.make(f"-j{str(os.cpu_count() or 1)}")
@@ -71,7 +73,8 @@ def _install():
 
 
 if not eva.sudo:
-    depends = ["git", "base-devel", "python"]
+    depends = ["git", "base-devel"]
+    optdepends = ["python"]
 
     if command_exists("gdb"):
         pkgname = None

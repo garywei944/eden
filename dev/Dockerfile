@@ -31,6 +31,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
     zip unzip \
     cmake \
     openssh-client openssh-server \
+    libgmp-dev libmpfr-dev libreadline-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null 2>&1; then \
     pacman -Syu --noconfirm \

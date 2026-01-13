@@ -7,5 +7,5 @@ if eva.sudo:
     if eva.pkgmgr == "apt":
         pkgname = "python3"
 else:
-    assert command_exists("python3")
+    assert command_exists("python3", sys_path=True)
     pkgname = None  # type: ignore
