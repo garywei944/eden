@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -47,6 +48,7 @@ class Context(Singleton):
     project_root: Path = PROJECT_ROOT
     is_root: bool = os.geteuid() == 0
     has_sudo: bool = has_sudo()
+    stdin_isatty: bool = sys.stdin.isatty()
 
     # check if it's a byted devbox
     byted: bool = field(init=False)

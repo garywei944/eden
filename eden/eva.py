@@ -48,7 +48,12 @@ class Eva(Singleton):
             target = stack.pop()
             try:
                 module = importlib.import_module(f"eden.species.{target}")
-            except ModuleNotFoundError:
+            except ModuleNotFoundError as e:
+                # check it it's because the module doesn't exist, not because of an import error
+                # inside the module
+                if e.name != f"eden.species.{target}":
+                    raise
+
                 # self._graph.add_node(target)
                 self._graph.add_edge("pkgmgr", target)
                 continue

@@ -1,12 +1,16 @@
+import getpass
+import os
 import shutil
 from pathlib import Path
+
+import pyzipper
 
 from eden.context import Context
 from eden.sh import esh as sh
 
 ctx = Context.instance()
 
-depends = ["unzip", "openssh", "gnupg"]
+depends = ["openssh", "gnupg"]
 
 
 def install():
@@ -37,7 +41,15 @@ def install():
 
     with sh.pushd(ctx.project_root / "secrets"):
         try:
-            sh.unzip("keys.zip", "-d", "keys")
+            # sh.unzip("keys.zip", "-d", "keys")
+            if ctx.stdin_isatty:
+                zip_passwd = getpass.getpass("Enter password for decrypting keys.zip: ")
+            else:
+                zip_passwd = os.getenv("ENEN_SECRETS_ZIP_PASSWORD", "")
+
+            Path("keys").mkdir(exist_ok=True)
+            with pyzipper.AESZipFile("keys.zip") as zf:
+                zf.extractall("keys", pwd=zip_passwd.encode())
 
             with sh.pushd("keys"):
                 shutil.copy("id_rsa", home / ".ssh" / "id_rsa")
@@ -45,7 +57,22 @@ def install():
                 shutil.copy("id_rsa.pub", home / ".ssh" / "id_rsa.pub")
                 home.joinpath(".ssh", "id_rsa.pub").chmod(0o644)
 
-                sh.gpg("--import", "garywei944_github.asc", "garywei944_github_key.gpg")
+                # GPG key
+                if ctx.stdin_isatty:
+                    sh.gpg("--import", "garywei944_github.asc", "garywei944_github_key.gpg")
+                else:
+                    gpg_passwd = os.getenv("ENEN_SECRETS_GPG_PASSWORD", "")
+                    sh.gpg(
+                        "--batch",
+                        "--yes",
+                        "--pinentry-mode",
+                        "loopback",
+                        "--passphrase",
+                        gpg_passwd,
+                        "--import",
+                        "garywei944_github.asc",
+                        "garywei944_github_key.gpg",
+                    )
 
                 # AWS config
                 home.joinpath(".aws").mkdir(exist_ok=True, parents=True)
