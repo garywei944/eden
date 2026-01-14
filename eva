@@ -53,19 +53,30 @@ log "MAMBA_ROOT_PREFIX: ${MAMBA_ROOT_PREFIX}"
 log "PATH: ${PATH}"
 
 config_sudo() {
+    # return if sudo not installed
     command_exists sudo || return
 
-    if sudo -n true 2>/dev/null; then
-        return
-    fi
+    # SUDO
+    # https://superuser.com/a/1281228
+    # https://github.com/koalaman/shellcheck/wiki/SC2181
+    if __sudo="$(sudo -nv 2>&1)"; then
+        # has sudo access w/o password
+        :
+    elif echo "$__sudo" | grep -q '^sudo:'; then
+        # has sudo access need password
 
-    log "configuring passwordless sudo for current user"
+        log "configuring passwordless sudo for current user"
 
-    sudo tee "/etc/sudoers.d/90_${USER}" >/dev/null <<EOF
+        sudo tee "/etc/sudoers.d/90_${USER}" >/dev/null <<EOF
 Defaults editor=/usr/bin/vim
 
 ${USER} ALL=(ALL) NOPASSWD: ALL
 EOF
+    else
+        # no sudo access
+        log "warning: no sudo access for current user"
+    fi
+    unset __sudo
 }
 
 ensure_basics() {
