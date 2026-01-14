@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 import sh
+from sh.contrib import bash
 
 __all__ = ["DEFAULT_PATHS", "esh", "curl", "which", "sys_which"]
 
@@ -13,12 +14,12 @@ esh = sh.bake(_in=sys.stdin, _out=sys.stdout, _err=sys.stderr)
 
 def which(cmd) -> str:
     """Find the full path to a command in the default PATHs."""
-    return sh.bash("-c", f"command -v {cmd}").strip()
+    return bash(f"command -v {cmd}").strip()
 
 
 def sys_which(cmd) -> str:
     """Find the full path to a command in the system PATH."""
-    return sh.bash("-c", f"command -v {cmd}", _env={"PATH": ":".join(DEFAULT_PATHS)}).strip()
+    return bash(f"command -v {cmd}", _env={"PATH": ":".join(DEFAULT_PATHS)}).strip()
 
 
 # _piped=True makes wait=False, so RunningCommand is returned
