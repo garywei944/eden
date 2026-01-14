@@ -38,11 +38,14 @@ PROJECT_ROOT="$(realpath "${SCRIPT_DIR}")"
 EDEN_HOME="${PROJECT_ROOT}/.eden"
 ENV_NAME="eden"
 
+# sys env
+export DEBIAN_FRONTEND=noninteractive
+USER="${USER:-$(id -un 2>/dev/null || echo unknown)}"
+export USER
+
 # mamba env
 export MAMBA_ROOT_PREFIX="${EDEN_HOME}/micromamba"
 export PATH="${MAMBA_ROOT_PREFIX}/bin:${PATH}"
-
-export DEBIAN_FRONTEND=noninteractive
 
 mkdir -p "${MAMBA_ROOT_PREFIX}"
 
