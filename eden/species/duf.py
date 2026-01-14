@@ -5,6 +5,7 @@ from packaging import version as pv
 from eden.context import Context
 from eden.eva import Eva
 from eden.sh import esh as sh
+from eden.sh import git
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -20,6 +21,6 @@ if (
     def install():
         with sh.pushd("/tmp"):
             shutil.rmtree("duf", ignore_errors=True)
-            sh.git.clone("https://github.com/muesli/duf.git")
+            git.clone("https://github.com/muesli/duf.git")
             with sh.pushd("duf"):
                 sh.go.build()

@@ -4,6 +4,7 @@ from pathlib import Path
 from eden.context import Context
 from eden.eva import Eva
 from eden.sh import esh as sh
+from eden.sh import git
 
 VERSION = "2025.10.20"
 
@@ -27,12 +28,12 @@ else:
     def install():
         with sh.pushd(Path.home() / ".local" / "share"):
             shutil.rmtree("pwndbg", ignore_errors=True)
-            sh.git.clone("https://github.com/pwndbg/pwndbg")
+            git.clone("https://github.com/pwndbg/pwndbg")
             with sh.pushd("pwndbg"):
                 if ctx.os_id == "debian" and ctx.os_version.major == 10:
-                    sh.git.checkout("debian10-final")
+                    git.checkout("debian10-final")
                 else:
-                    sh.git.checkout(VERSION)
+                    git.checkout(VERSION)
 
                 sh.Command("./setup.sh")()
 
