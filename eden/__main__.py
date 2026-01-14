@@ -50,10 +50,6 @@ def main():
 
     # TODO(gary): set up proxy
 
-    # update package manager
-    if not args.dry_run:
-        update_pkg_manager()
-
     eva = Eva(
         args=args,
         ctx=ctx,
@@ -62,6 +58,10 @@ def main():
         ],
     )
     logger.info("eva: %s", eva)
+
+    # update package manager
+    if eva.sudo and not args.dry_run:
+        update_pkg_manager()
 
     eva.build_graph()
 
