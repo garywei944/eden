@@ -3,11 +3,15 @@
 set -euxo pipefail
 
 NO_CACHE_BUILD=0
-while [ "$#" -gt 0 ]; do
+while [[ "$#" -gt 0 ]]; do
   case $1 in
   -r | --no-cache)
     NO_CACHE_BUILD=1
     shift
+    ;;
+  *)
+    echo "Unknown parameter passed: $1"
+    exit 1
     ;;
   esac
 done
@@ -27,7 +31,7 @@ CPUS="$(nproc).0"
 export CPUS
 
 build_options=()
-if [ "${NO_CACHE_BUILD}" -eq 1 ]; then
+if [[ "${NO_CACHE_BUILD}" -eq 1 ]]; then
   build_options+=("--no-cache")
 fi
 

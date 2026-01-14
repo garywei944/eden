@@ -79,7 +79,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
 # --------------------------------------------------
 # Copy repo & default command
 # --------------------------------------------------
-COPY . /eden
-RUN chmod 777 /eden
-WORKDIR /eden
+COPY . /ci
+RUN chmod 777 /ci
+WORKDIR /ci
 CMD ["bash", "eva"]

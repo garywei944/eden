@@ -2,15 +2,14 @@ services:
   eden:
     build:
       context: ..
-      dockerfile: dev/Dockerfile
+      dockerfile: ci/Dockerfile
       # ! All arguments should be passed in by
       # ! "docker compose build --build-arg ***"
       # The defualt values are set within the Dockerfile
       args:
-        BASE_IMAGE: ${BASE_IMAGE:-debian:12}
+        BASE_IMAGE: ${BASE_IMAGE:-debian:latest}
         CPUS: ${CPUS:-16.0}
-        USER_ID: ${USER_ID:-1000}
-        GROUP_ID: ${GROUP_ID:-1000}
+        MODE: ${MODE:-root} # root, eva, or adam
     image: ${IMAGE_NAME:-eden-dev:latest}
     container_name: ${CONTAINER_NAME:-eden-dev}
     cpus: ${CPUS:-16.0}
@@ -43,3 +42,4 @@ services:
     working_dir: /eden
     stdin_open: true
     tty: true
+    entrypoint: ["/bin/bash", "-li"]
