@@ -1,3 +1,7 @@
+import os
+import tempfile
+from pathlib import Path
+
 import httpx
 
 from eden.sh import DEFAULT_PATHS
@@ -22,3 +26,12 @@ def download_file(url: str, dest: str) -> None:
         with open(dest, "wb") as file:
             for chunk in response.iter_bytes():
                 file.write(chunk)
+
+
+def get_tmpfs_dir() -> Path:
+    """Get a temporary directory in tmpfs if available, otherwise use system temp."""
+    tmpfs_paths = [Path("/dev/shm"), Path("/run/user") / str(os.getuid()) / "tmp"]
+    for path in tmpfs_paths:
+        if path.is_dir() and os.access(path, os.W_OK):
+            return Path(tempfile.mkdtemp(dir=path))
+    return Path(tempfile.mkdtemp())

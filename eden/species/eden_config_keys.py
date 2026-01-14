@@ -6,9 +6,11 @@ from pathlib import Path
 import pyzipper
 
 from eden.context import Context
+from eden.eva import Eva
 from eden.sh import esh as sh
 
 ctx = Context.instance()
+eva = Eva.instance()
 
 depends = ["openssh", "gnupg"]
 
@@ -36,7 +38,6 @@ def install():
     ```
     """
     home = Path.home()
-
     home.joinpath(".ssh").mkdir(mode=0o700, exist_ok=True, parents=True)
 
     with sh.pushd(ctx.project_root / "secrets"):
@@ -50,9 +51,9 @@ def install():
                 assert zip_passwd, "EDEN_SECRETS_ZIP_PASSWORD environment variable is not set"
 
             with pyzipper.AESZipFile("keys.zip") as zf:
-                zf.extractall("keys", pwd=zip_passwd.encode())
+                zf.extractall(eva.tmpfs_root / "keys", pwd=zip_passwd.encode())
 
-            with sh.pushd("keys"):
+            with sh.pushd(eva.tmpfs_root / "keys"):
                 shutil.copy("id_rsa", home / ".ssh" / "id_rsa")
                 home.joinpath(".ssh", "id_rsa").chmod(0o600)
                 shutil.copy("id_rsa.pub", home / ".ssh" / "id_rsa.pub")
@@ -86,4 +87,4 @@ def install():
                 home.joinpath(".ossutilconfig").chmod(0o600)
         finally:
             # cleanup
-            shutil.rmtree("keys", ignore_errors=True)
+            shutil.rmtree(eva.tmpfs_root / "keys", ignore_errors=True)

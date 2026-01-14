@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import sh
@@ -7,8 +8,8 @@ __all__ = ["DEFAULT_PATHS", "esh", "curl", "which", "sys_which"]
 HOME = Path.home()
 DEFAULT_PATHS = [str(HOME / ".local/bin"), "/usr/local/bin", "/usr/bin", "/bin"]
 
-esh = sh.bake(_fg=True)
-# esh = sh.bake(_out=sys.stdout, _err=sys.stderr)
+# esh = sh.bake(_fg=True)
+esh = sh.bake(_in=sys.stdin, _out=sys.stdout, _err=sys.stderr)
 
 
 def which(cmd):
