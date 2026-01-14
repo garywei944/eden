@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 import sh
+from sh.contrib import bash, git
 
 __all__ = ["DEFAULT_PATHS", "esh", "curl", "which", "sys_which"]
 
@@ -14,13 +15,13 @@ esh = sh.bake(_in=sys.stdin, _out=sys.stdout, _err=sys.stderr)
 
 def which(cmd):
     """Find the full path to a command in the default PATHs."""
-    return sh.contrib.bash(f"command -v {cmd}").strip()
+    return bash(f"command -v {cmd}").strip()
 
 
 def sys_which(cmd):
     """Find the full path to a command in the system PATH."""
-    return sh.contrib.bash(f"command -v {cmd}", _env={"PATH": ":".join(DEFAULT_PATHS)}).strip()
+    return bash(f"command -v {cmd}", _env={"PATH": ":".join(DEFAULT_PATHS)}).strip()
 
 
 curl = sh.curl.bake("-fsSL", _piped=True)
-git = sh.contrib.git.bake(_in=sys.stdin, _out=sys.stdout, _err=sys.stderr)
+git = git.bake(_in=sys.stdin, _out=sys.stdout, _err=sys.stderr)
