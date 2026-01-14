@@ -13,8 +13,8 @@ from packaging import version as pv
 
 from eden.args import Args
 from eden.context import Context
+from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.sh import esh as sh
 
 logger = logging.getLogger(__name__)
 

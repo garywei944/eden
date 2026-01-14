@@ -4,9 +4,9 @@ import tarfile
 from pathlib import Path
 
 from eden.context import Context
+from eden.esh import esh as sh
+from eden.esh import sys_which
 from eden.eva import Eva
-from eden.sh import esh as sh
-from eden.sh import sys_which
 from eden.utils.misc import command_exists, download_file
 
 ctx = Context.instance()

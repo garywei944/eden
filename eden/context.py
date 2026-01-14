@@ -8,7 +8,7 @@ import distro
 from packaging import version as pv
 
 from eden.args import Args
-from eden.sh import esh as sh
+from eden.esh import esh as sh
 from eden.utils.singleton import Singleton
 
 __all__ = ["Context"]

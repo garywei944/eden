@@ -3,9 +3,8 @@ import shutil
 from pathlib import Path
 
 from eden.context import Context
+from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.sh import esh as sh
-from eden.sh import git
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -33,7 +32,7 @@ else:
         """
         shutil.rmtree("/tmp/bashtop", ignore_errors=True)
         sh.python3("-m", "pip", "install", "--upgrade", "--break-system-packages", "bpytop")
-        git.clone("--depth", "1", "https://github.com/aristocratos/bashtop.git", "/tmp/bashtop")
+        sh.gitclone("--depth", "1", "https://github.com/aristocratos/bashtop.git", "/tmp/bashtop")
         with sh.pushd("/tmp/bashtop"):
             sh.make(f"-j{str(os.cpu_count() or 1)}")
             if eva.sudo:

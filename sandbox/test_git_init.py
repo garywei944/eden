@@ -13,12 +13,12 @@ Path("/tmp/test_git_init").mkdir(parents=True, exist_ok=True)
 with sh.pushd("/tmp/test_git_init"):
     shutil.rmtree(".git", ignore_errors=True)
     git("init")
-    git.remote.add("origin", "git@github.com:garywei944/eva_arch.git")
-    git.config("core.excludesFile", ".eva.gitignore")
-    git.fetch(depth=1)
-    git.reset("--hard", "origin/main")
-    if git.branch("--show-current") == "main":
-        git.branch("-m", "master", "main")
+    sh.gitremote.add("origin", "git@github.com:garywei944/eva_arch.git")
+    sh.gitconfig("core.excludesFile", ".eva.gitignore")
+    sh.gitfetch(depth=1)
+    sh.gitreset("--hard", "origin/main")
+    if sh.gitbranch("--show-current") == "main":
+        sh.gitbranch("-m", "master", "main")
     else:
-        print("git branch", repr(git.branch("--show-current")))
-    git.branch("--set-upstream-to=origin/main", "main")
+        print("git branch", repr(sh.gitbranch("--show-current")))
+    sh.gitbranch("--set-upstream-to=origin/main", "main")

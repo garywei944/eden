@@ -1,4 +1,4 @@
-from eden.sh import esh as sh
+from eden.esh import esh as sh
 
 depends = ["git", "eden_dotfiles", "ohmyzsh"]
 

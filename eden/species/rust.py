@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 
 from eden.context import Context
+from eden.esh import curl
+from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.sh import curl
-from eden.sh import esh as sh
 
 ctx = Context.instance()
 eva = Eva.instance()

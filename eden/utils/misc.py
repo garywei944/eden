@@ -4,8 +4,8 @@ from pathlib import Path
 
 import httpx
 
-from eden.sh import DEFAULT_PATHS
-from eden.sh import esh as sh
+from eden.esh import DEFAULT_PATHS
+from eden.esh import esh as sh
 
 __all__ = ["command_exists", "download_file"]
 

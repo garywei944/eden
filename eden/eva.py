@@ -10,7 +10,7 @@ from dagviz import visualize_dag
 
 from eden.args import Args
 from eden.context import Context
-from eden.sh import esh as sh
+from eden.esh import esh as sh
 from eden.utils.misc import get_tmpfs_dir
 from eden.utils.singleton import Singleton
 

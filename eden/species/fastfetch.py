@@ -5,9 +5,8 @@ from pathlib import Path
 from packaging import version as pv
 
 from eden.context import Context
+from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.sh import esh as sh
-from eden.sh import git
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -16,7 +15,7 @@ eva = Eva.instance()
 def _install():
     with sh.pushd("/tmp"):
         shutil.rmtree("fastfetch", ignore_errors=True)
-        git.clone("--depth=1", "https://github.com/fastfetch-cli/fastfetch.git")
+        sh.gitclone("--depth=1", "https://github.com/fastfetch-cli/fastfetch.git")
         with sh.pushd("fastfetch"):
             Path("build").mkdir(exist_ok=True)
             with sh.pushd("build"):

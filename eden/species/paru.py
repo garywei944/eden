@@ -1,7 +1,6 @@
 from eden.context import Context
+from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.sh import esh as sh
-from eden.sh import git
 from eden.utils.misc import command_exists
 
 ctx = Context.instance()
@@ -17,6 +16,6 @@ def install():
     if command_exists("paru"):
         return
 
-    git.clone("https://aur.archlinux.org/paru.git", "/tmp/paru")
+    sh.gitclone("https://aur.archlinux.org/paru.git", "/tmp/paru")
     with sh.pushd("/tmp/paru"):
         sh.makepkg("-si", "--noconfirm")

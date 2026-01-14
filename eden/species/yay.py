@@ -1,7 +1,6 @@
 from eden.context import Context
+from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.sh import esh as sh
-from eden.sh import git
 from eden.utils.misc import command_exists
 
 ctx = Context.instance()
@@ -16,6 +15,6 @@ depends = ["base-devel", "git"]
 def install():
     if command_exists("yay"):
         return
-    git.clone("https://aur.archlinux.org/yay-bin.git", "/tmp/yay")
+    sh.gitclone("https://aur.archlinux.org/yay-bin.git", "/tmp/yay")
     with sh.pushd("/tmp/yay"):
         sh.makepkg("-si", "--noconfirm")
