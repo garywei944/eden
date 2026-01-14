@@ -37,9 +37,10 @@ jobs:
             --build-arg MODE=${{ matrix.mode }} \
             -t ci:test .
       - name: Run
+        env:
+          EDEN_SECRETS_ZIP_PASSWORD: ${{ secrets.EDEN_SECRETS_ZIP_PASSWORD }}
+          EDEN_SECRETS_GPG_PASSWORD: ${{ secrets.EDEN_SECRETS_GPG_PASSWORD }}
         run: |
           docker run --rm \
           --user ${{ matrix.mode }} \
-          -e EDEN_SECRETS_ZIP_PASSWORD=${{ secrets.EDEN_SECRETS_ZIP_PASSWORD }} \
-          -e EDEN_SECRETS_GPG_PASSWORD=${{ secrets.EDEN_SECRETS_GPG_PASSWORD }} \
           ci:test
