@@ -47,7 +47,8 @@ def install():
             else:
                 zip_passwd = os.getenv("EDEN_SECRETS_ZIP_PASSWORD", "")
 
-            Path("keys").mkdir(exist_ok=True)
+                assert zip_passwd, "EDEN_SECRETS_ZIP_PASSWORD environment variable is not set"
+
             with pyzipper.AESZipFile("keys.zip") as zf:
                 zf.extractall("keys", pwd=zip_passwd.encode())
 
@@ -62,6 +63,7 @@ def install():
                     sh.gpg("--import", "garywei944_github.asc", "garywei944_github_key.gpg")
                 else:
                     gpg_passwd = os.getenv("EDEN_SECRETS_GPG_PASSWORD", "")
+                    assert gpg_passwd, "EDEN_SECRETS_GPG_PASSWORD environment variable is not set"
                     sh.gpg(
                         "--batch",
                         "--yes",
