@@ -7,7 +7,7 @@ set -euo pipefail
 LIST=0
 INTERACTIVE=0
 args=()
-while [ "$#" -gt 0 ]; do
+while [[ "$#" -gt 0 ]]; do
     case $1 in
     -l | --list)
         LIST=1
@@ -42,6 +42,8 @@ ENV_NAME="eden"
 export MAMBA_ROOT_PREFIX="${EDEN_HOME}/micromamba"
 export PATH="${MAMBA_ROOT_PREFIX}/bin:${PATH}"
 
+export DEBIAN_FRONTEND=noninteractive
+
 mkdir -p "${MAMBA_ROOT_PREFIX}"
 
 log "MAMBA_ROOT_PREFIX: ${MAMBA_ROOT_PREFIX}"
@@ -59,7 +61,7 @@ ensure_basics() {
         fi
     fi
     command_exists curl || to_install+=("curl")
-    [ ${#to_install[@]} -eq 0 ] && return
+    [[ ${#to_install[@]} -eq 0 ]] && return
 
     log "installing basic dependencies: ${to_install[*]}"
 

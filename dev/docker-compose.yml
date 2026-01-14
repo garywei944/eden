@@ -43,3 +43,4 @@ services:
     stdin_open: true
     tty: true
     entrypoint: ["/bin/bash", "-li"]
+    user: ${MODE:-root} # root, eva, or adam
