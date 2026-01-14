@@ -26,5 +26,5 @@ dependencies:
   # Add the package here and run `mamba env update -f environment.yml --prune`
   # for dependency completeness.
   - pip:
-      - sh
+      - sh>=2.2.2
       - py-dagviz
