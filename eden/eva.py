@@ -144,7 +144,7 @@ class Eva(Singleton):
             logger.info("Installing packages with %s: %s", pkgmgr, pkgs)
             if not self.args.dry_run:
                 if pkgmgr == "apt":
-                    sh.sudo("apt-get", "install", "-y", *pkgs)
+                    sh.sudo("apt-get", "install", "-y", *pkgs, _tty_out=False)
                 elif pkgmgr == "pacman":
                     sh.sudo.pacman("-S", "--noconfirm", "--needed", *pkgs)
                 elif pkgmgr in ["pacman", "yay", "paru"]:
