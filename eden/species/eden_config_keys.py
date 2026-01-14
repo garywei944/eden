@@ -45,7 +45,7 @@ def install():
             if ctx.stdin_isatty:
                 zip_passwd = getpass.getpass("Enter password for decrypting keys.zip: ")
             else:
-                zip_passwd = os.getenv("ENEN_SECRETS_ZIP_PASSWORD", "")
+                zip_passwd = os.getenv("EDEN_SECRETS_ZIP_PASSWORD", "")
 
             Path("keys").mkdir(exist_ok=True)
             with pyzipper.AESZipFile("keys.zip") as zf:
@@ -61,7 +61,7 @@ def install():
                 if ctx.stdin_isatty:
                     sh.gpg("--import", "garywei944_github.asc", "garywei944_github_key.gpg")
                 else:
-                    gpg_passwd = os.getenv("ENEN_SECRETS_GPG_PASSWORD", "")
+                    gpg_passwd = os.getenv("EDEN_SECRETS_GPG_PASSWORD", "")
                     sh.gpg(
                         "--batch",
                         "--yes",
