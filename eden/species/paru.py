@@ -16,6 +16,6 @@ def install():
     if command_exists("paru"):
         return
 
-    sh.gitclone("https://aur.archlinux.org/paru.git", "/tmp/paru")
+    sh.git.clone("https://aur.archlinux.org/paru.git", "/tmp/paru")
     with sh.pushd("/tmp/paru"):
         sh.makepkg("-si", "--noconfirm")

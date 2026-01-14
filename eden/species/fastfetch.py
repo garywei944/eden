@@ -15,7 +15,7 @@ eva = Eva.instance()
 def _install():
     with sh.pushd("/tmp"):
         shutil.rmtree("fastfetch", ignore_errors=True)
-        sh.gitclone("--depth=1", "https://github.com/fastfetch-cli/fastfetch.git")
+        sh.git.clone("--depth=1", "https://github.com/fastfetch-cli/fastfetch.git")
         with sh.pushd("fastfetch"):
             Path("build").mkdir(exist_ok=True)
             with sh.pushd("build"):

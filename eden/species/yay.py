@@ -15,6 +15,6 @@ depends = ["base-devel", "git"]
 def install():
     if command_exists("yay"):
         return
-    sh.gitclone("https://aur.archlinux.org/yay-bin.git", "/tmp/yay")
+    sh.git.clone("https://aur.archlinux.org/yay-bin.git", "/tmp/yay")
     with sh.pushd("/tmp/yay"):
         sh.makepkg("-si", "--noconfirm")

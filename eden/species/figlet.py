@@ -15,7 +15,7 @@ if not eva.sudo:
     def install():
         with sh.pushd("/tmp"):
             shutil.rmtree("figlet", ignore_errors=True)
-            sh.gitclone("--depth=1", "https://github.com/cmatsuoka/figlet.git")
+            sh.git.clone("--depth=1", "https://github.com/cmatsuoka/figlet.git")
             with sh.pushd("figlet"):
                 # sed -i 's/\/usr\/local/$(HOME)\/.local/g' Makefile
                 path = Path("Makefile")

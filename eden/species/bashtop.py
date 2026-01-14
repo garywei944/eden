@@ -32,7 +32,7 @@ else:
         """
         shutil.rmtree("/tmp/bashtop", ignore_errors=True)
         sh.python3("-m", "pip", "install", "--upgrade", "--break-system-packages", "bpytop")
-        sh.gitclone("--depth", "1", "https://github.com/aristocratos/bashtop.git", "/tmp/bashtop")
+        sh.git.clone("--depth", "1", "https://github.com/aristocratos/bashtop.git", "/tmp/bashtop")
         with sh.pushd("/tmp/bashtop"):
             sh.make(f"-j{str(os.cpu_count() or 1)}")
             if eva.sudo:

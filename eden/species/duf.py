@@ -20,6 +20,6 @@ if (
     def install():
         with sh.pushd("/tmp"):
             shutil.rmtree("duf", ignore_errors=True)
-            sh.gitclone("https://github.com/muesli/duf.git")
+            sh.git.clone("https://github.com/muesli/duf.git")
             with sh.pushd("duf"):
                 sh.go.build()

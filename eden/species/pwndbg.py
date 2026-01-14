@@ -27,12 +27,12 @@ else:
     def install():
         with sh.pushd(Path.home() / ".local" / "share"):
             shutil.rmtree("pwndbg", ignore_errors=True)
-            sh.gitclone("https://github.com/pwndbg/pwndbg")
+            sh.git.clone("https://github.com/pwndbg/pwndbg")
             with sh.pushd("pwndbg"):
                 if ctx.os_id == "debian" and ctx.os_version.major == 10:
-                    sh.gitcheckout("debian10-final")
+                    sh.git.checkout("debian10-final")
                 else:
-                    sh.gitcheckout(VERSION)
+                    sh.git.checkout(VERSION)
 
                 sh.Command("./setup.sh")()
 
