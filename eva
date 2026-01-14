@@ -49,6 +49,22 @@ mkdir -p "${MAMBA_ROOT_PREFIX}"
 log "MAMBA_ROOT_PREFIX: ${MAMBA_ROOT_PREFIX}"
 log "PATH: ${PATH}"
 
+config_sudo() {
+    command_exists sudo || return
+
+    if sudo -n true 2>/dev/null; then
+        return
+    fi
+
+    log "configuring passwordless sudo for current user"
+
+    sudo tee "/etc/sudoers.d/90_${USER}" >/dev/null <<EOF
+Defaults editor=/usr/bin/vim
+
+${USER} ALL=(ALL) NOPASSWD: ALL
+EOF
+}
+
 ensure_basics() {
     # ensure curl and procps are installed
     to_install=()
@@ -61,6 +77,7 @@ ensure_basics() {
         fi
     fi
     command_exists curl || to_install+=("curl")
+    command_exists sudo || to_install+=("sudo")
     [[ ${#to_install[@]} -eq 0 ]] && return
 
     log "installing basic dependencies: ${to_install[*]}"
@@ -120,6 +137,7 @@ create_env() {
 
 main() {
     ensure_basics
+    config_sudo
     install_micromamba
     init_micromamba
     create_env

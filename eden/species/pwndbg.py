@@ -22,7 +22,7 @@ if ctx.os_id == "arch":
             gdbinit.write("source /usr/share/pwndbg/gdbinit.py\n")
 
 else:
-    depends = ["git", "sudo", "python"]
+    depends = ["git", "python"]
 
     def install():
         with sh.pushd(Path.home() / ".local" / "share"):

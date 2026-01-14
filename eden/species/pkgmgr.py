@@ -9,9 +9,7 @@ requires_pkgmgr = False
 
 depends = []
 
-if eva.sudo:
-    depends.append("sudo")
-else:
+if not eva.sudo:
     depends.append("rust")
 
 if eva.sudo and ctx.os_id == "arch":

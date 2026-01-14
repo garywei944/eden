@@ -11,7 +11,7 @@ from eden.args import Args
 from eden.sh import esh as sh
 from eden.utils.singleton import Singleton
 
-__all__ = ["Context", "has_sudo"]
+__all__ = ["Context"]
 
 logger = logging.getLogger(__name__)
 

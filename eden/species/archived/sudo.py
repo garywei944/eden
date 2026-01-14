@@ -18,7 +18,7 @@ def install():
         if ctx.os_id == "arch":
             sh.pacman("-Syu", "--noconfirm", "sudo")
         elif eva.pkgmgr == "apt":
-            sh.apt("install", "-y", "sudo")
+            sh.apt_get.install("-y", "sudo")
 
 
 def post_install():
@@ -27,5 +27,7 @@ def post_install():
         return
 
     username = getpass.getuser()
-    sh.sudo.tee(f"/etc/sudoers.d/90_{username}", _in=f"{username} ALL=(ALL) NOPASSWD: ALL\n")
+    sh.sudo(
+        "-n", "tee", f"/etc/sudoers.d/90_{username}", _in=f"{username} ALL=(ALL) NOPASSWD: ALL\n"
+    )
     logger.info("Configured NOPASSWD sudo for user '%s'.", username)

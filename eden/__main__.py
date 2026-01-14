@@ -52,10 +52,7 @@ def main():
 
     # update package manager
     if not args.dry_run:
-        if ctx.is_root:
-            update_pkg_manager()
-        elif ctx.has_sudo:
-            update_pkg_manager(sudo=True)
+        update_pkg_manager()
 
     eva = Eva(
         args=args,
@@ -72,19 +69,13 @@ def main():
         eva.execute(targets)
 
 
-def update_pkg_manager(sudo: bool = False):
+def update_pkg_manager():
     ctx = Context.instance()
 
     if ctx.os_id in ["ubuntu", "debian"]:
-        if sudo:
-            sh.sudo.apt.update()
-        else:
-            sh.apt.update()
+        sh.sudo.apt.update()
     elif ctx.os_id in ["arch"]:
-        if sudo:
-            sh.sudo.pacman("-Sy")
-        else:
-            sh.pacman("-Sy")
+        sh.sudo.pacman("-Sy")
     else:
         logger.warning("Unsupported OS for package manager update: %s", ctx.os_id)
 

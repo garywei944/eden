@@ -8,7 +8,6 @@ eva = Eva.instance()
 requires_pkgmgr = False
 
 if eva.sudo:
-    depends = ["sudo"]
     if ctx.os_id == "arch":
         pkgmgr = "pacman"
 else:
