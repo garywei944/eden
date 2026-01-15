@@ -44,6 +44,7 @@ def main():
     home = Path.home()
     (home / ".local" / "bin").mkdir(exist_ok=True, parents=True)
     (home / ".local" / "share").mkdir(exist_ok=True, parents=True)
+    (home / ".local" / "share" / "zoxide").mkdir(exist_ok=True, parents=True)
     (home / "projects").mkdir(exist_ok=True, parents=True)
     (home / "sandbox").mkdir(exist_ok=True, parents=True)
     if ctx.byted:

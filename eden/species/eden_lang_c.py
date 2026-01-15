@@ -13,4 +13,5 @@ if eva.sudo:
         "ctags",
         "valgrind",
         "pwndbg",
+        "gdbserver",
     ]

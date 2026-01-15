@@ -52,6 +52,8 @@ base_depends = [
     # "neofetch",
     "fastfetch",
     "httpie",
+    "curlie",
+    "doggo",
 ]
 
 

@@ -20,7 +20,6 @@ sudo_only_depends = [
     "readline",
     "rlwrap",
     # editors and IDEs
-    "vim",
     "emacs",
     # develop tools
     "colordiff",
@@ -29,10 +28,12 @@ sudo_only_depends = [
 ]
 
 base_depends = [
+    "vim",
     "gdb",
     "shfmt",
     "git-delta",
     "git-flow",
+    "python-debugpy",
 ]
 
 if eva.sudo:
