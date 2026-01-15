@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from packaging import version as pv
+
 from eden.context import Context
 from eden.esh import curl
 from eden.esh import esh as sh
@@ -11,7 +13,11 @@ eva = Eva.instance()
 
 requires_pkgmgr = False
 
-if not eva.sudo or (eva.sudo and ctx.os_id == "debian" and ctx.os_version.major < 12):
+if (
+    not eva.sudo
+    or (eva.sudo and ctx.os_id == "debian" and ctx.os_version.major <= 12)
+    or (eva.sudo and ctx.os_id == "ubuntu" and ctx.os_version < pv.Version("24.04"))
+):
     depends = ["curl", "base-devel"]
 
     def install():
