@@ -61,6 +61,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     python3 python3-pip \
     gnupg \
     zsh \
+    vim \
     && rm -rf /var/lib/apt/lists/*; \
     elif command -v pacman >/dev/null; then \
     pacman -Sy --noconfirm \
@@ -74,6 +75,7 @@ RUN if [[ "$MODE" == "adam" ]]; then \
     python python-pip \
     gnupg \
     zsh \
+    vim \
     && pacman -Scc --noconfirm; \
     fi; \
     fi
