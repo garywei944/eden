@@ -23,7 +23,7 @@ def download_file(url: str, dest: Path | str) -> None:
     """Download a file from a URL to a destination path."""
     with httpx.stream("GET", url, follow_redirects=True) as response:
         response.raise_for_status()
-        with Path(dest).open("wb", encoding="utf-8") as file:
+        with Path(dest).open("wb") as file:
             for chunk in response.iter_bytes():
                 file.write(chunk)
 
