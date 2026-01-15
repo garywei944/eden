@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from eden.esh import esh as sh
 
 depends = ["git", "eden_dotfiles", "ohmyzsh"]
@@ -29,3 +31,17 @@ def install():
     """
 
     sh.chsh("-s", "/bin/zsh")
+
+    with sh.pushd(Path.home() / ".config/zsh_custom/plugins"):
+        sh.git.clone("https://github.com/zsh-users/zsh-autosuggestions", depth=1)
+        sh.git.clone("https://github.com/zsh-users/zsh-syntax-highlighting", depth=1)
+
+    with sh.pushd(Path.home()):
+        with Path(".bashrc").open("a", encoding="utf-8") as bashrc:
+            bashrc.write("\n. ~/.zsh.bashrc\n")
+        with Path(".zprofile").open("a", encoding="utf-8") as zprofile:
+            zprofile.write('\n[[ -z "$EVA" ]] && . ~/.profile.sh\n')
+        with Path(".zshrc").open("w", encoding="utf-8") as zshrc:
+            zshrc.write(". ~/.rc.zsh\n")
+        with Path(".ssh/config").open("a", encoding="utf-8") as ssh_config:
+            ssh_config.write("Include ~/.config/ssh.conf\n")

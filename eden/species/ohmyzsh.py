@@ -9,6 +9,8 @@ ctx = Context.instance()
 eva = Eva.instance()
 
 depends = ["curl", "git", "zsh"]
+# if we don't clone the dotfiles first, then there might be conflicts when cloning the dotfiles.
+optdepends = ["eden_dotfiles"]
 
 if eva.sudo and ctx.os_id == "arch":
     pkgname = "oh-my-zsh.git."
