@@ -16,4 +16,5 @@ if eva.sudo and ctx.os_id == "arch":
     pkgname = "oh-my-zsh.git."
 else:
     # sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    sh.sh(_in=curl(INSTALL_URL))
+    def install():
+        sh.sh(_in=curl(INSTALL_URL))
