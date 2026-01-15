@@ -4,6 +4,7 @@ from pathlib import Path
 
 from eden.context import Context
 from eden.esh import esh as sh
+from eden.esh import sys_sh
 from eden.eva import Eva
 
 ctx = Context.instance()
@@ -31,7 +32,7 @@ else:
         ```
         """
         shutil.rmtree("/tmp/bashtop", ignore_errors=True)
-        sh.python3("-m", "pip", "install", "--upgrade", "--break-system-packages", "bpytop")
+        sys_sh.python3("-m", "pip", "install", "--upgrade", "--break-system-packages", "bpytop")
         sh.git.clone("--depth", "1", "https://github.com/aristocratos/bashtop.git", "/tmp/bashtop")
         with sh.pushd("/tmp/bashtop"):
             sh.make(f"-j{str(os.cpu_count() or 1)}")

@@ -6,6 +6,5 @@ depends = [
     "eden_lang_c",
     "eden_lang_python",
     "eden_lang_java",
-    "eden_dotfiles",
     "eden_config_terminal",
 ]

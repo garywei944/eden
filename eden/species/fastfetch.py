@@ -41,16 +41,20 @@ if eva.sudo:
                 "fastfetch requires Ubuntu 22.04 or higher when installing with sudo."
             )
         if ctx.os_version < pv.parse("25.04"):
-            # install via ppa
-            depends = ["software-properties-common"]
+            # # install via ppa
+            # depends = ["software-properties-common"]
 
-            def pre_install():
-                sh.sudo("add-apt-repository", "-y", "ppa:zhangsongcui3371/fastfetch")
+            # def pre_install():
+            #     sh.sudo("add-apt-repository", "-y", "ppa:zhangsongcui3371/fastfetch")
+            depends = ["git", "cmake", "base-devel"]
+            optdepends = ["pkg-config"]
+            install = _install
 
     elif ctx.os_id == "debian":
-        depends = ["git", "cmake", "base-devel"]
-        optdepends = ["pkg-config"]
-        install = _install
+        if ctx.os_version.major < 13:
+            depends = ["git", "cmake", "base-devel"]
+            optdepends = ["pkg-config"]
+            install = _install
 else:
     depends = ["git", "cmake", "base-devel"]
     optdepends = ["pkg-config"]

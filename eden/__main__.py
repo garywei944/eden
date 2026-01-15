@@ -7,6 +7,7 @@ setup_root_logger()
 logging.getLogger("sh").setLevel(logging.INFO)
 logging.getLogger("httpcore").setLevel(logging.INFO)
 
+import os
 from pathlib import Path
 
 from packaging import version as pv
@@ -78,6 +79,16 @@ def update_pkg_manager():
         sh.sudo.pacman("-Sy")
     else:
         logger.warning("Unsupported OS for package manager update: %s", ctx.os_id)
+
+
+def setup_env():
+    eva = Eva.instance()
+
+    if eva.pkgmgr == "apt":
+        os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+
+    # use multiple CPU for cargo builds
+    os.environ["CARGO_BUILD_JOBS"] = str(os.cpu_count() or 1)
 
 
 main()
