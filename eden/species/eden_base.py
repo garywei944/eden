@@ -38,7 +38,8 @@ base_depends = [
     "bat",
     "tree",
     "dust",
-    "bashtop",
+    # "bashtop",
+    "btop",
     "duf",
     "zoxide",
     "sd",
@@ -50,6 +51,7 @@ base_depends = [
     "figlet",
     # "neofetch",
     "fastfetch",
+    "httpie",
 ]
 
 
