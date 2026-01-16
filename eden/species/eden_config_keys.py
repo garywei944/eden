@@ -50,10 +50,10 @@ def install():
 
             assert zip_passwd, "EDEN_SECRETS_ZIP_PASSWORD environment variable is not set"
 
-        with get_tmpfs_dir(pushd=True):
+        with get_tmpfs_dir() as tmpdir:
 
             with pyzipper.AESZipFile("keys.zip") as zf:
-                zf.extractall(pwd=zip_passwd.encode())
+                zf.extractall(path=tmpdir, pwd=zip_passwd.encode())
 
             # ! For security reasons, we need to remove this file after installation
 
@@ -74,34 +74,36 @@ def install():
                 )
                 sh.ssh_add(str(home / ".ssh" / "bytedance"))
 
-            shutil.copy("id_rsa", home / ".ssh" / "id_rsa")
-            home.joinpath(".ssh", "id_rsa").chmod(0o600)
-            shutil.copy("id_rsa.pub", home / ".ssh" / "id_rsa.pub")
-            home.joinpath(".ssh", "id_rsa.pub").chmod(0o644)
+            with sh.pushd(tmpdir):
+                # SSH key
+                shutil.copy("id_rsa", home / ".ssh" / "id_rsa")
+                home.joinpath(".ssh", "id_rsa").chmod(0o600)
+                shutil.copy("id_rsa.pub", home / ".ssh" / "id_rsa.pub")
+                home.joinpath(".ssh", "id_rsa.pub").chmod(0o644)
 
-            # GPG key
-            if ctx.stdin_isatty:
-                sh.gpg("--import", "garywei944_github.asc", "garywei944_github_key.gpg")
-            else:
-                gpg_passwd = os.getenv("EDEN_SECRETS_GPG_PASSWORD", "")
-                assert gpg_passwd, "EDEN_SECRETS_GPG_PASSWORD environment variable is not set"
-                sh.gpg(
-                    "--batch",
-                    "--yes",
-                    "--pinentry-mode",
-                    "loopback",
-                    "--passphrase",
-                    gpg_passwd,
-                    "--import",
-                    "garywei944_github.asc",
-                    "garywei944_github_key.gpg",
-                )
+                # GPG key
+                if ctx.stdin_isatty:
+                    sh.gpg("--import", "garywei944_github.asc", "garywei944_github_key.gpg")
+                else:
+                    gpg_passwd = os.getenv("EDEN_SECRETS_GPG_PASSWORD", "")
+                    assert gpg_passwd, "EDEN_SECRETS_GPG_PASSWORD environment variable is not set"
+                    sh.gpg(
+                        "--batch",
+                        "--yes",
+                        "--pinentry-mode",
+                        "loopback",
+                        "--passphrase",
+                        gpg_passwd,
+                        "--import",
+                        "garywei944_github.asc",
+                        "garywei944_github_key.gpg",
+                    )
 
-            # AWS config
-            home.joinpath(".aws").mkdir(exist_ok=True, parents=True)
-            shutil.copy("config", home / ".aws" / "config")
-            home.joinpath(".aws", "config").chmod(0o600)
+                # AWS config
+                home.joinpath(".aws").mkdir(exist_ok=True, parents=True)
+                shutil.copy("config", home / ".aws" / "config")
+                home.joinpath(".aws", "config").chmod(0o600)
 
-            # OSS util config
-            shutil.copy(".ossutilconfig", home / ".ossutilconfig")
-            home.joinpath(".ossutilconfig").chmod(0o600)
+                # OSS util config
+                shutil.copy(".ossutilconfig", home / ".ossutilconfig")
+                home.joinpath(".ossutilconfig").chmod(0o600)
