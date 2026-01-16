@@ -94,6 +94,11 @@ class Eva(Singleton):
 
     def execute(self, targets: list[str]):
         logger.info("=" * 80)
+
+        # exclude targets in args.excludes
+        targets = [t for t in targets if t not in self.args.excludes]
+        logger.warning("Excluding targets: %s", [t for t in self.args.excludes if t in targets])
+
         logger.info("Executing installation batch: %s", targets)
         # 1. run all pre_install hooks
         for target in targets:
