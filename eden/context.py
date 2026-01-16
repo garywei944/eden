@@ -52,6 +52,7 @@ class Context(Singleton):
 
     # check if it's a byted devbox
     byted: bool = field(init=False)
+    github_actions: bool = os.getenv("GITHUB_ACTIONS") == "true"
 
     def __post_init__(self):
         object.__setattr__(self, "byted", self.args.byted)

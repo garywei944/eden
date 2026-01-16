@@ -6,6 +6,7 @@ from typing import Iterator
 
 import httpx
 
+from eden.context import Context
 from eden.esh import DEFAULT_PATHS
 from eden.esh import esh as sh
 
@@ -32,20 +33,45 @@ def download_file(url: str, dest: Path | str) -> None:
 
 @contextmanager
 def get_tmpfs_dir(pushd: bool = False) -> Iterator[Path]:
-    """Get a temporary directory in tmpfs if available, otherwise use system temp."""
-    tmpfs_paths = [Path("/dev/shm"), Path("/run/user") / str(os.getuid()) / "tmp"]
-    for path in tmpfs_paths:
-        if path.is_dir() and os.access(path, os.W_OK):
-            with tempfile.TemporaryDirectory(dir=path) as tmpdir:
-                if pushd:
-                    with sh.pushd(tmpdir):
-                        yield Path(tmpdir)
-                else:
-                    yield Path(tmpdir)
-                return
-    with tempfile.TemporaryDirectory() as tmpdir:
+    """Get a temporary directory in tmpfs if available, otherwise use system temp.
+
+    Priority:
+      1. Environment override (e.g. EDEN_TMPDIR)
+      2. GitHub Actions (/tmp)
+      3. tmpfs locations
+      4. system default
+    """
+
+    ctx = Context.instance()
+
+    # 1. Explicit override
+    override = os.getenv("EDEN_TMPDIR")
+    if override:
+        base = Path(override)
+    # 2. GitHub Actions
+    elif ctx.github_actions:
+        base = Path("/tmp")
+    # 3. tmpfs candidates
+    else:
+        base = next(
+            (
+                p
+                for p in (
+                    # Path("/dev/shm"),  # ! files in /dev/shm are not executable
+                    Path("/run/user") / str(os.getuid()) / "tmp",
+                    Path("/mnt/tmpfs"),
+                    Path("/scratch"),
+                    Path("/tmp"),
+                )
+                if p.is_dir() and os.access(p, os.W_OK)
+            ),
+            Path(tempfile.gettempdir()),
+        )
+
+    with tempfile.TemporaryDirectory(dir=base) as tmpdir:
+        path = Path(tmpdir)
         if pushd:
-            with sh.pushd(tmpdir):
-                yield Path(tmpdir)
+            with sh.pushd(path):
+                yield path
         else:
-            yield Path(tmpdir)
+            yield path
