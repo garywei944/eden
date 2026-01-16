@@ -31,7 +31,7 @@ def has_sudo() -> bool:
 
 
 def parse_os_version() -> pv.Version:
-    version = distro.version(best=True)
+    version = distro.version()
     try:
         return pv.parse(version)
     except pv.InvalidVersion:

@@ -54,8 +54,9 @@ def install():
                 zf.extractall(eva.tmpfs_root / "keys", pwd=zip_passwd.encode())
 
             with sh.pushd(eva.tmpfs_root / "keys"):
-                shutil.copy("id_rsa", home / ".ssh" / "id_rsa")
-                home.joinpath(".ssh", "id_rsa").chmod(0o600)
+                if not ctx.byted:
+                    shutil.copy("id_rsa", home / ".ssh" / "id_rsa")
+                    home.joinpath(".ssh", "id_rsa").chmod(0o600)
                 shutil.copy("id_rsa.pub", home / ".ssh" / "id_rsa.pub")
                 home.joinpath(".ssh", "id_rsa.pub").chmod(0o644)
 
