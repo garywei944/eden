@@ -50,7 +50,7 @@ def install():
 
             assert zip_passwd, "EDEN_SECRETS_ZIP_PASSWORD environment variable is not set"
 
-        with get_tmpfs_dir():
+        with get_tmpfs_dir(pushd=True):
 
             with pyzipper.AESZipFile("keys.zip") as zf:
                 zf.extractall(pwd=zip_passwd.encode())
