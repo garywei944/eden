@@ -1,6 +1,8 @@
 import os
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 import httpx
 
@@ -28,10 +30,22 @@ def download_file(url: str, dest: Path | str) -> None:
                 file.write(chunk)
 
 
-def get_tmpfs_dir() -> Path:
+@contextmanager
+def get_tmpfs_dir(pushd: bool = False) -> Iterator[Path]:
     """Get a temporary directory in tmpfs if available, otherwise use system temp."""
     tmpfs_paths = [Path("/dev/shm"), Path("/run/user") / str(os.getuid()) / "tmp"]
     for path in tmpfs_paths:
         if path.is_dir() and os.access(path, os.W_OK):
-            return Path(tempfile.mkdtemp(dir=path))
-    return Path(tempfile.mkdtemp())
+            with tempfile.TemporaryDirectory(dir=path) as tmpdir:
+                if pushd:
+                    with sh.pushd(tmpdir):
+                        yield Path(tmpdir)
+                else:
+                    yield Path(tmpdir)
+                return
+    with tempfile.TemporaryDirectory() as tmpdir:
+        if pushd:
+            with sh.pushd(tmpdir):
+                yield Path(tmpdir)
+        else:
+            yield Path(tmpdir)

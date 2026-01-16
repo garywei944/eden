@@ -7,14 +7,14 @@ from packaging import version as pv
 from eden.context import Context
 from eden.esh import esh as sh
 from eden.eva import Eva
+from eden.utils.misc import get_tmpfs_dir
 
 ctx = Context.instance()
 eva = Eva.instance()
 
 
 def _install():
-    with sh.pushd("/tmp"):
-        shutil.rmtree("fastfetch", ignore_errors=True)
+    with get_tmpfs_dir(pushd=True):
         sh.git.clone("--depth=1", "https://github.com/fastfetch-cli/fastfetch.git")
         with sh.pushd("fastfetch"):
             Path("build").mkdir(exist_ok=True)

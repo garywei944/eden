@@ -4,7 +4,7 @@ from pathlib import Path
 from eden.context import Context
 from eden.esh import esh as sh
 from eden.eva import Eva
-from eden.utils.misc import download_file
+from eden.utils.misc import download_file, get_tmpfs_dir
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -29,7 +29,7 @@ if not eva.sudo or (ctx.os_id == "debian" and ctx.os_version.major < 12):
         ```
         """
 
-        with sh.pushd("/tmp"):
+        with get_tmpfs_dir(pushd=True):
             download_file(
                 "https://github.com/aristocratos/btop/releases/download/v1.4.6/btop-x86_64-unknown-linux-musl.tbz",
                 "btop.tbz",

@@ -7,7 +7,7 @@ from eden.context import Context
 from eden.esh import esh as sh
 from eden.esh import sys_which
 from eden.eva import Eva
-from eden.utils.misc import command_exists, download_file
+from eden.utils.misc import command_exists, download_file, get_tmpfs_dir
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -33,7 +33,7 @@ def _install():
     && make "-j$(nproc)" \
     && sudo make install
     """
-    with sh.pushd("/tmp"):
+    with get_tmpfs_dir(pushd=True):
         download_file(
             f"https://sourceware.org/pub/gdb/releases/gdb-{GDB_VERSION}.tar.xz",
             f"gdb-{GDB_VERSION}.tar.xz",

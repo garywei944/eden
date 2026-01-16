@@ -1,9 +1,9 @@
+import atexit
 import importlib
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Generator, Literal
+from typing import Callable, Generator, Literal
 
 import networkx as nx
 from dagviz import visualize_dag
@@ -11,7 +11,6 @@ from dagviz import visualize_dag
 from eden.args import Args
 from eden.context import Context
 from eden.esh import esh as sh
-from eden.utils.misc import get_tmpfs_dir
 from eden.utils.singleton import Singleton
 
 logger = logging.getLogger(__name__)
@@ -28,7 +27,8 @@ class Eva(Singleton):
 
     pkgmgr: Literal["apt", "pacman", "yay", "paru"] = field(init=False)
     sudo: bool = field(init=False)
-    tmpfs_root: Path = field(default_factory=get_tmpfs_dir)
+
+    exit_hooks: list[Callable[[], None]] = field(default_factory=list)
 
     _graph: nx.DiGraph = field(default_factory=nx.DiGraph)
     _modules: dict[str, object] = field(default_factory=dict)
@@ -42,6 +42,16 @@ class Eva(Singleton):
             self.pkgmgr = "paru"
         else:
             raise RuntimeError(f"Unsupported OS: {self.ctx.os_id}")
+
+        def _exit_hook():
+            logger.info("Running Eva exit hooks...")
+            for hook in self.exit_hooks:
+                try:
+                    hook()
+                except Exception as e:
+                    logger.error("Error running exit hook: %s", e)
+
+        atexit.register(_exit_hook)
 
     def build_graph(self):
         stack = self.targets.copy() + ["pkgmgr"]

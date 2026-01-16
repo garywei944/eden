@@ -1,10 +1,9 @@
-import shutil
-
 from packaging import version as pv
 
 from eden.context import Context
 from eden.esh import esh as sh
 from eden.eva import Eva
+from eden.utils.misc import get_tmpfs_dir
 
 ctx = Context.instance()
 eva = Eva.instance()
@@ -18,8 +17,7 @@ if (
 
     # build from source
     def install():
-        with sh.pushd("/tmp"):
-            shutil.rmtree("duf", ignore_errors=True)
+        with get_tmpfs_dir(pushd=True):
             sh.git.clone("https://github.com/muesli/duf.git")
             with sh.pushd("duf"):
                 sh.go.build()
