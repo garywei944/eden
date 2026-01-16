@@ -31,7 +31,7 @@ def _install():
                     "--build", ".", "--target", "fastfetch", "--", f"-j{str(os.cpu_count() or 1)}"
                 )
 
-                Path("fastfetch").rename(Path.home() / ".local" / "bin" / "fastfetch")
+                shutil.copy("fastfetch", Path.home() / ".local" / "bin" / "fastfetch")
 
 
 if eva.sudo:
