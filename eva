@@ -1,27 +1,17 @@
 #!/usr/bin/env bash
-
-set -euo pipefail
-
-# This script is POSIX-compliant
+set -Eeuxo pipefail
+IFS=$'\n\t'
 
 LIST=0
 INTERACTIVE=0
 args=()
-while [[ "$#" -gt 0 ]]; do
+while (($#)); do
     case $1 in
-    -l | --list)
-        LIST=1
-        shift
-        ;;
-    -i | --interactive)
-        INTERACTIVE=1
-        shift
-        ;;
-    *)
-        args+=("$1")
-        shift
-        ;;
+    -l | --list) LIST=1 ;;
+    -i | --interactive) INTERACTIVE=1 ;;
+    *) args+=("$1") ;;
     esac
+    shift
 done
 
 log() {
@@ -33,15 +23,14 @@ command_exists() {
 }
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-PROJECT_ROOT="$(realpath "${SCRIPT_DIR}")"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}" && pwd -P)"
 
 EDEN_HOME="${PROJECT_ROOT}/.eden"
 ENV_NAME="eden"
 
 # sys env
 export DEBIAN_FRONTEND=noninteractive
-USER="${USER:-$(id -un 2>/dev/null || echo unknown)}"
-export USER
+export USER="${USER:-$(id -un 2>/dev/null || echo unknown)}"
 
 # mamba env
 export MAMBA_ROOT_PREFIX="${EDEN_HOME}/micromamba"
@@ -54,7 +43,7 @@ log "PATH: ${PATH}"
 
 config_sudo() {
     # return if sudo not installed
-    command_exists sudo || return
+    command_exists sudo || return 0
 
     # SUDO
     # https://superuser.com/a/1281228
@@ -69,7 +58,6 @@ config_sudo() {
 
         sudo tee "/etc/sudoers.d/90_${USER}" >/dev/null <<EOF
 Defaults editor=/usr/bin/vim
-
 ${USER} ALL=(ALL) NOPASSWD: ALL
 EOF
     else
@@ -115,9 +103,7 @@ ensure_basics() {
 }
 
 install_micromamba() {
-    if [[ -x "${MAMBA_ROOT_PREFIX}/bin/micromamba" ]]; then
-        return
-    fi
+    [[ -x "${MAMBA_ROOT_PREFIX}/bin/micromamba" ]] && return
 
     log "installing micromamba (silent)"
 
@@ -141,9 +127,7 @@ init_micromamba() {
 }
 
 create_env() {
-    if micromamba env list | awk '{print $1}' | grep -qx "${ENV_NAME}"; then
-        return
-    fi
+    micromamba env list | awk '{print $1}' | grep -qx "${ENV_NAME}" && return
 
     log "creating eden environment"
     micromamba create -y -f "${PROJECT_ROOT}/environment.yml"
@@ -156,11 +140,11 @@ main() {
     init_micromamba
     create_env
 
-    cd ${PROJECT_ROOT}
-    if [[ "${LIST}" -eq 1 ]]; then
+    cd "${PROJECT_ROOT}"
+    if ((LIST)); then
         micromamba activate "${ENV_NAME}"
         micromamba list
-    elif [[ "${INTERACTIVE}" -eq 1 ]]; then
+    elif ((INTERACTIVE)); then
         log "starting interactive shell in eden environment"
         exec micromamba run -n "${ENV_NAME}" "${SHELL}" -i
     else

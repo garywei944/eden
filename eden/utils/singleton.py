@@ -378,7 +378,7 @@ class Singleton(ABC, metaclass=SingletonMeta):
         if exec_stack:
             caller = exec_stack[-1]
             caller_metadata = _get_metadata(caller)
-            if cls not in caller_metadata.depends:
+            if cls != caller and cls not in caller_metadata.depends:
                 logger.error(
                     "[Singleton] Strict mode: Calling %s.instance() within %s "
                     "is not allowed. "
