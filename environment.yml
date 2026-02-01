@@ -28,3 +28,4 @@ dependencies:
   - pip:
       - sh>=2.2.2
       - py-dagviz
+      - evakit

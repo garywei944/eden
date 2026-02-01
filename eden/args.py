@@ -1,6 +1,6 @@
 from typing import override
 
-from eden.utils.args_base import ArgsBase
+from evakit.args_base import ArgsBase
 
 __all__ = ["Args"]
 

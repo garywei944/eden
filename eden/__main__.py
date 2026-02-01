@@ -1,6 +1,6 @@
 import logging
 
-from eden.utils.logging_utils import setup_root_logger
+from evakit.logging_utils import setup_root_logger
 
 setup_root_logger()
 
