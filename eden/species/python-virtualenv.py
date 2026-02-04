@@ -18,4 +18,4 @@ if eva.sudo:
             #     sh.sudo.python3(
             #         "-m", "pip", "install", "--upgrade", "--break-system-packages", "virtualenv"
             #     )
-            sh.python3("-m", "pip", "install", "--upgrade", "virtualenv")
+            sh.sudo.python3("-m", "pip", "install", "--upgrade", "virtualenv")

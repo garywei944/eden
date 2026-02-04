@@ -65,6 +65,8 @@ def main():
     if eva.sudo and not args.dry_run:
         update_pkg_manager()
 
+    setup_env()
+
     eva.build_graph()
 
     for targets in eva.plan():
@@ -75,7 +77,7 @@ def update_pkg_manager():
     ctx = Context.instance()
 
     if ctx.os_id in ["ubuntu", "debian"]:
-        sh.sudo.apt.update()
+        sh.sudo("apt", "update")
     elif ctx.os_id in ["arch"]:
         sh.sudo.pacman("-Sy")
     else:
