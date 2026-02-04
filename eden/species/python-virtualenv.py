@@ -1,4 +1,4 @@
-from packing import version as pv
+from packaging import version as pv
 
 from eden.context import Context
 from eden.esh import esh as sh
