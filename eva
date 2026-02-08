@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -Eeuxo pipefail
+set -Eeuo pipefail
 IFS=$'\n\t'
 
 LIST=0
@@ -51,13 +51,12 @@ config_sudo() {
     if __sudo="$(sudo -nv 2>&1)"; then
         # has sudo access w/o password
         :
-    elif echo "$__sudo" | grep -q '^sudo:'; then
+    elif echo "$__sudo" | grep -q '^sudo'; then
         # has sudo access need password
 
         log "configuring passwordless sudo for current user"
 
         sudo tee "/etc/sudoers.d/90_${USER}" >/dev/null <<EOF
-Defaults editor=/usr/bin/vim
 ${USER} ALL=(ALL) NOPASSWD: ALL
 EOF
     else
