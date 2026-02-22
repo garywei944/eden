@@ -5,9 +5,8 @@ from eden.eva import Eva
 ctx = Context.instance()
 eva = Eva.instance()
 
-if eva.sudo and ctx.os_id == "arch":
-    pkgname = "doggo-bin"
-else:
+if not eva.sudo or ctx.os_id != "arch":
+
     depends = ["curl", "go"]
 
     def install():
