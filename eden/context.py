@@ -5,11 +5,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import distro
-from evakit.singleton import Singleton
 from packaging import version as pv
 
 from eden.args import Args
 from eden.esh import esh as sh
+from evakit.singleton import Singleton
 
 __all__ = ["Context"]
 

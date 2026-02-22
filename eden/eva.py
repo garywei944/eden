@@ -7,11 +7,11 @@ from typing import Callable, Generator, Literal
 
 import networkx as nx
 from dagviz import visualize_dag
-from evakit.singleton import Singleton
 
 from eden.args import Args
 from eden.context import Context
 from eden.esh import esh as sh
+from evakit.singleton import Singleton
 
 logger = logging.getLogger(__name__)
 

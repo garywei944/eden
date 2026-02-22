@@ -18,7 +18,7 @@ select = ["E", "F", "I"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["eden"]
+known-first-party = ["eden", "evakit"]
 
 [tool.ruff.lint.per-file-ignores]
 "eden/__main__.py" = ["E402"]
