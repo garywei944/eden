@@ -26,7 +26,7 @@ def has_sudo() -> bool:
     try:
         sh.sudo(["-n", "true"])
         return True
-    except (sh.ErrorReturnCode, sh.CommandNotFound):
+    except sh.ErrorReturnCode, sh.CommandNotFound:
         return False
 
 

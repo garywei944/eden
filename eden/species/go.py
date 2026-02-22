@@ -31,6 +31,4 @@ elif eva.sudo and ctx.os_id == "arch":
 
 def post_install():
     paths = os.getenv("PATH", "").split(":")
-    os.environ["PATH"] = ":".join(
-        [str(Path.home() / "go/bin"), str(Path.home() / ".local/opt/go/bin")] + paths
-    )
+    os.environ["PATH"] = ":".join([str(Path.home() / "go/bin"), str(Path.home() / ".local/opt/go/bin")] + paths)

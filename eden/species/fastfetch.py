@@ -27,9 +27,7 @@ def _install():
                     )
                 else:
                     sh.cmake("..")
-                sh.cmake(
-                    "--build", ".", "--target", "fastfetch", "--", f"-j{str(os.cpu_count() or 1)}"
-                )
+                sh.cmake("--build", ".", "--target", "fastfetch", "--", f"-j{str(os.cpu_count() or 1)}")
 
                 shutil.copy("fastfetch", Path.home() / ".local" / "bin" / "fastfetch")
 
@@ -37,9 +35,7 @@ def _install():
 if eva.sudo:
     if ctx.os_id == "ubuntu":
         if ctx.os_version < pv.parse("22.04"):
-            raise RuntimeError(
-                "fastfetch requires Ubuntu 22.04 or higher when installing with sudo."
-            )
+            raise RuntimeError("fastfetch requires Ubuntu 22.04 or higher when installing with sudo.")
         if ctx.os_version < pv.parse("25.04"):
             # # install via ppa
             # depends = ["software-properties-common"]

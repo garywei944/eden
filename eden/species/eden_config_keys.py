@@ -58,9 +58,7 @@ def install():
             # ! For security reasons, we need to remove this file after installation
 
             if ctx.byted:
-                eva.exit_hooks.append(
-                    lambda: home.joinpath(".ssh", "id_rsa").unlink(missing_ok=True)
-                )
+                eva.exit_hooks.append(lambda: home.joinpath(".ssh", "id_rsa").unlink(missing_ok=True))
                 # ssh-keygen -t ed25519 -C "your_email@example.com" -N "" -f ~/.ssh/id_ed25519
                 sh.ssh_keygen(
                     "-t",

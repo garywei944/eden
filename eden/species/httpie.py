@@ -28,10 +28,7 @@ if eva.sudo:
                 "/usr/share/keyrings/httpie.gpg",
                 _in=curl("https://packages.httpie.io/deb/KEY.gpg"),
             )
-            payload = (
-                "deb [arch=amd64 signed-by=/usr/share/keyrings/httpie.gpg] "
-                "https://packages.httpie.io/deb ./"
-            )
+            payload = "deb [arch=amd64 signed-by=/usr/share/keyrings/httpie.gpg] " "https://packages.httpie.io/deb ./"
             sh.sudo.tee("/etc/apt/sources.list.d/httpie.list", _in=payload)
             sh.sudo("apt-get", "update")
 

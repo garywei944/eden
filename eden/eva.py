@@ -91,9 +91,7 @@ class Eva(Singleton):
                 self._graph.add_edge(dep, target)
 
         if not nx.is_directed_acyclic_graph(self._graph):
-            logger.warning(
-                "All cycles in the dependency graph:\n%s", list(nx.simple_cycles(self._graph))
-            )
+            logger.warning("All cycles in the dependency graph:\n%s", list(nx.simple_cycles(self._graph)))
             raise RuntimeError("Dependency graph has cycles!")
 
         logger.debug("Dependency graph edges:\n%s", visualize_dag(self._graph, round_angle=True))

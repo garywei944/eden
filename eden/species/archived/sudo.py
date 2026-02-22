@@ -27,7 +27,5 @@ def post_install():
         return
 
     username = getpass.getuser()
-    sh.sudo(
-        "-n", "tee", f"/etc/sudoers.d/90_{username}", _in=f"{username} ALL=(ALL) NOPASSWD: ALL\n"
-    )
+    sh.sudo("-n", "tee", f"/etc/sudoers.d/90_{username}", _in=f"{username} ALL=(ALL) NOPASSWD: ALL\n")
     logger.info("Configured NOPASSWD sudo for user '%s'.", username)

@@ -13,9 +13,7 @@ VERSION = "0.2.0"
 if eva.sudo and ctx.os_id == "arch":
     pkgname = "gitflow-cjs"
 else:
-    logger.warning(
-        "Skipping git-flow installation - prebuilt binaries only available for Arch with sudo."
-    )
+    logger.warning("Skipping git-flow installation - prebuilt binaries only available for Arch with sudo.")
     pkgname = None  # type: ignore[assignment]
     # with sh.pushd("/tmp"):
     #     download_file(

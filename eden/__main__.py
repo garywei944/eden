@@ -55,9 +55,7 @@ def main():
     eva = Eva(
         args=args,
         ctx=ctx,
-        targets=[
-            f"eden_{t}" if Path(f"eden/species/eden_{t}.py").exists() else t for t in args.targets
-        ],
+        targets=[f"eden_{t}" if Path(f"eden/species/eden_{t}.py").exists() else t for t in args.targets],
     )
     logger.info("eva: %s", eva)
 

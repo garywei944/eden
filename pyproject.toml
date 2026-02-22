@@ -5,12 +5,12 @@ requires-python = ">=3.14"
 
 # ---------------- Black ----------------
 [tool.black]
-line-length = 100
-target-version = ["py313"]
+line-length = 120
+target-version = ["py314"]
 
 # ---------------- Ruff ----------------
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py314"
 
 [tool.ruff.lint]
