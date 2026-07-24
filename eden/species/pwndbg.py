@@ -14,7 +14,7 @@ eva = Eva.instance()
 if not eva.sudo:
     raise RuntimeError("pwndbg installation requires sudo privileges")
 
-if ctx.os_id == "arch":
+if ctx.is_arch:
 
     def post_install():
 

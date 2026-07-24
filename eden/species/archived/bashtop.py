@@ -10,7 +10,7 @@ from eden.eva import Eva
 ctx = Context.instance()
 eva = Eva.instance()
 
-if eva.sudo and ctx.os_id == "arch":
+if eva.sudo and ctx.is_arch:
     pass
 elif eva.sudo and ctx.os_id == "ubuntu":
     depends = ["software-properties-common"]

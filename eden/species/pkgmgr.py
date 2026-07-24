@@ -12,5 +12,5 @@ depends = []
 if not eva.sudo:
     depends.append("rust")
 
-if eva.sudo and ctx.os_id == "arch":
+if eva.sudo and ctx.is_arch:
     depends += ["yay", "paru"]

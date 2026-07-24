@@ -11,7 +11,7 @@ eva = Eva.instance()
 
 requires_pkgmgr = False
 
-if eva.sudo and ctx.os_id == "arch":
+if eva.sudo and ctx.is_arch:
     requires_pkgmgr = True
     pkgname = "rust"
 else:

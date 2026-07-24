@@ -6,7 +6,7 @@ from eden.eva import Eva
 ctx = Context.instance()
 eva = Eva.instance()
 
-if eva.sudo and ctx.os_id == "arch":
+if eva.sudo and ctx.is_arch:
     pkgname = "sdkman-bin"
 else:
     depends = ["curl", "zip", "unzip"]

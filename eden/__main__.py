@@ -31,13 +31,13 @@ def main():
     logger.info("context: %s", ctx)
 
     # 0. check for os compatibility
-    if ctx.os_id not in ["ubuntu", "debian", "arch"]:
+    if ctx.os_id not in ["ubuntu", "debian"] and not ctx.is_arch:
         raise RuntimeError(f"Unsupported OS: {ctx.os_id}")
     if ctx.os_id == "ubuntu" and ctx.os_version < pv.Version("20.04"):
         raise RuntimeError(f"Unsupported Ubuntu version: {ctx.os_version.major}")
     if ctx.os_id == "debian" and ctx.os_version < pv.Version("10"):
         raise RuntimeError(f"Unsupported Debian version: {ctx.os_version.major}")
-    if ctx.is_root and ctx.os_id == "arch":
+    if ctx.is_root and ctx.is_arch:
         raise RuntimeError("Running as root on Arch is not supported")
 
     # 1. create projects, sandbox, and byted folders
@@ -76,7 +76,7 @@ def update_pkg_manager():
 
     if ctx.os_id in ["ubuntu", "debian"]:
         sh.sudo("apt", "update")
-    elif ctx.os_id in ["arch"]:
+    elif ctx.is_arch:
         sh.sudo.pacman("-Sy")
     else:
         logger.warning("Unsupported OS for package manager update: %s", ctx.os_id)

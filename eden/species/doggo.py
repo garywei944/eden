@@ -5,7 +5,7 @@ from eden.eva import Eva
 ctx = Context.instance()
 eva = Eva.instance()
 
-if not eva.sudo or ctx.os_id != "arch":
+if not eva.sudo or not ctx.is_arch:
 
     depends = ["curl", "go"]
 

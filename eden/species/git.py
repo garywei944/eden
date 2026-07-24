@@ -8,7 +8,7 @@ eva = Eva.instance()
 requires_pkgmgr = False
 
 if eva.sudo:
-    if ctx.os_id == "arch":
+    if ctx.is_arch:
         pkgmgr = "pacman"
 else:
     assert command_exists("git")

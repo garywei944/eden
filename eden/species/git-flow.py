@@ -10,7 +10,7 @@ eva = Eva.instance()
 
 VERSION = "0.2.0"
 
-if eva.sudo and ctx.os_id == "arch":
+if eva.sudo and ctx.is_arch:
     pkgname = "gitflow-cjs"
 else:
     logger.warning("Skipping git-flow installation - prebuilt binaries only available for Arch with sudo.")

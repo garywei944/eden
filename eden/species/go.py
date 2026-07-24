@@ -25,7 +25,7 @@ if (
 
 elif eva.sudo and eva.pkgmgr == "apt":
     pkgname = "golang"
-elif eva.sudo and ctx.os_id == "arch":
+elif eva.sudo and ctx.is_arch:
     requires_pkgmgr = True
 
 

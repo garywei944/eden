@@ -61,7 +61,7 @@ if eva.sudo:
     depends = system_depends + base_depends
     if ctx.os_id == "ubuntu":
         depends += ["software-properties-common", "apt-transport-https"]
-    elif ctx.os_id == "arch":
+    elif ctx.is_arch:
         depends += ["which"]
 else:
     depends = base_depends

@@ -56,3 +56,7 @@ class Context(Singleton):
 
     def __post_init__(self):
         object.__setattr__(self, "byted", self.args.byted)
+
+    @property
+    def is_arch(self) -> bool:
+        return self.os_id in ["arch", "cachyos"]

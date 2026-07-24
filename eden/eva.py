@@ -38,7 +38,7 @@ class Eva(Singleton):
 
         if self.ctx.os_id in ["ubuntu", "debian"]:
             self.pkgmgr = "apt"
-        elif self.ctx.os_id == "arch":
+        elif self.ctx.is_arch:
             self.pkgmgr = "paru"
         else:
             raise RuntimeError(f"Unsupported OS: {self.ctx.os_id}")

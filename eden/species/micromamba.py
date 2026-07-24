@@ -8,7 +8,7 @@ from eden.eva import Eva
 ctx = Context.instance()
 eva = Eva.instance()
 
-if eva.sudo and ctx.os_id == "arch":
+if eva.sudo and ctx.is_arch:
     pkgname = ["micromamba-bin", "miniconda3"]
 else:
     depends = ["curl"]
