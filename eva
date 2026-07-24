@@ -45,7 +45,7 @@ if __sudo="$(sudo -nv 2>&1)"; then
     # has sudo access w/o password
     log "sudo access: passwordless"
     SUDOMODE="passwordless"
-elif echo "$__sudo" | grep -q '^sudo'; then
+elif echo "$__sudo" | grep -qi 'password'; then
     # has sudo access need password
     log "sudo access: password required"
     SUDOMODE="password"

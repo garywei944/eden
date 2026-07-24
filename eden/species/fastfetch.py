@@ -12,10 +12,17 @@ from eden.utils.misc import get_tmpfs_dir
 ctx = Context.instance()
 eva = Eva.instance()
 
+FASTFETCH_VERSION = "2.66.0"
+
 
 def _install():
     with get_tmpfs_dir(pushd=True):
-        sh.git.clone("--depth=1", "https://github.com/fastfetch-cli/fastfetch.git")
+        sh.git.clone(
+            "--depth=1",
+            "--branch",
+            FASTFETCH_VERSION,
+            "https://github.com/fastfetch-cli/fastfetch.git",
+        )
         with sh.pushd("fastfetch"):
             Path("build").mkdir(exist_ok=True)
             with sh.pushd("build"):

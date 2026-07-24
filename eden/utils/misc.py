@@ -24,11 +24,13 @@ def command_exists(command: str, sys_path: bool = False) -> bool:
 
 def download_file(url: str, dest: Path | str) -> None:
     """Download a file from a URL to a destination path."""
-    with httpx.stream("GET", url, follow_redirects=True) as response:
-        response.raise_for_status()
-        with Path(dest).open("wb") as file:
-            for chunk in response.iter_bytes():
-                file.write(chunk)
+    transport = httpx.HTTPTransport(retries=3)
+    with httpx.Client(follow_redirects=True, timeout=30, transport=transport) as client:
+        with client.stream("GET", url) as response:
+            response.raise_for_status()
+            with Path(dest).open("wb") as file:
+                for chunk in response.iter_bytes():
+                    file.write(chunk)
 
 
 @contextmanager
