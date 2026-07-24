@@ -12,7 +12,7 @@ from eden.utils.misc import get_tmpfs_dir
 ctx = Context.instance()
 eva = Eva.instance()
 
-FASTFETCH_VERSION = "2.66.0"
+FASTFETCH_VERSION = "2.59.0"
 
 
 def _install():
