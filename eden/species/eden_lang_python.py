@@ -10,8 +10,10 @@ if eva.sudo:
         "python-pip",
         "python-virtualenv",
         "micromamba",
+        "pixi",
     ]
 else:
     depends = [
         "micromamba",
+        "pixi",
     ]
