@@ -30,4 +30,7 @@ def post_install():
 
     with sh.pushd(Path.home()):
         with Path(".zshrc").open("w", encoding="utf-8") as zshrc:
+            # aur installs oh-my-zsh in /usr/share/oh-my-zsh
+            if eva.sudo and ctx.is_arch:
+                zshrc.write("export ZSH=/usr/share/oh-my-zsh\n")
             zshrc.write(". ~/.rc.zsh\n")
