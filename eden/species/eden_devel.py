@@ -30,6 +30,7 @@ sudo_only_depends = [
 base_depends = [
     "vim",
     "gdb",
+    "gdb-dashboard",
     "shfmt",
     "git-delta",
     "git-flow",
