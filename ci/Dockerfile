@@ -12,6 +12,9 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 # --------------------------------------------------
 # Base packages (never install sudo here)
 # --------------------------------------------------
+# Freexian ELTS signing key, used only on buster (Debian 10)
+ADD https://deb.freexian.com/extended-lts/archive-key.gpg /tmp/freexian-elts.gpg
+
 RUN \
     if command -v apt-get >/dev/null; then \
     . /etc/os-release; \
@@ -21,7 +24,11 @@ RUN \
     -e 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
     /etc/apt/sources.list; \
     echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid; \
+    install -m 644 /tmp/freexian-elts.gpg /etc/apt/trusted.gpg.d/freexian-archive-extended-lts.gpg; \
+    echo 'deb http://deb.freexian.com/extended-lts buster main contrib non-free' \
+    > /etc/apt/sources.list.d/extended-lts.list; \
     fi; \
+    rm -f /tmp/freexian-elts.gpg; \
     apt-get update; \
     apt-get install -y bash ca-certificates; \
     rm -rf /var/lib/apt/lists/*; \
